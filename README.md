@@ -78,8 +78,8 @@ able to use this global variable to correctly select between your content URLs.
 ## Why bother?
 
 Most browsers today support GZIP-deflated content:
-http://webmasters.stackexchange.com/questions/22217/which-browsers-handle-content-encoding-gzip-and-which-of-them-has-any-special
-http://stackoverflow.com/questions/575290/which-browsers-claim-to-support-http-compression-but-are-actually-flaky
+- http://webmasters.stackexchange.com/questions/22217/which-browsers-handle-content-encoding-gzip-and-which-of-them-has-any-special
+- http://stackoverflow.com/questions/575290/which-browsers-claim-to-support-http-compression-but-are-actually-flaky
 
 If you are confident that you don't need to support these ancient user agents, then you may
 skip detection completely and just assume that all of your users have modern web browsers.

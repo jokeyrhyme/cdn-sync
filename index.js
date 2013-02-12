@@ -7,4 +7,20 @@ var fs = require('fs'),
 
 // custom modules
 
+// this module
+
 var config = require(path.join('libs', 'config'));
+
+// TODO: scan all visible files in directory to be synchronised
+
+  // TODO: populate array of CDNFiles
+
+// TODO: create worker threads
+
+  // TODO: worker asks main thread for a CDNFile
+
+  // TODO: worker uses CDN to process CDNFile
+
+  // TODO: worker cleans up and then asks for next CDNFile
+
+// TODO: use CDN to trigger post-sync clean-up (e.g. invalidation)

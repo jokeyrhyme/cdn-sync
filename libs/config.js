@@ -3,6 +3,12 @@
 var fs = require('fs'),
     path = require('path');
 
+// 3rd-party modules
+
+// custom modules
+
+// this module
+
 // find .cdn-sync.json
 
 var filename = '.cdn-sync.json';

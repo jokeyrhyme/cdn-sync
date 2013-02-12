@@ -25,12 +25,14 @@ This project is not yet functional.
 
 ### Option A: single, mixed destination
 
+- **best if your dev-ops won't give you a second S3 bucket**
 - only certain files are deflated
 - deflated copies have `.gz` appended to their filename
 - your URLs will need to add the `.gz` if browser support is sufficient
 
 ### Option B: dual destination
 
+- **potentially the easiest for front-end developers**
 - one destination for completely uncompressed content
 - other destination for content that has been deflated where appropriate
 - both destinations have copies of all files (URL paths are the same)
@@ -38,8 +40,8 @@ This project is not yet functional.
 
 ### Option C: pure sync, assumes automatic compression
 
-- just like option A but without any compression
-- only suitable if the CDN you use offers automatic compression
+- **best if your CDN offers automatic compression**
+- just like option A but without any pre-compression
 - this option will be the last to be implemented, as other tools probably do this better
 
 ## Strategy

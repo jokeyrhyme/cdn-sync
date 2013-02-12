@@ -2,7 +2,7 @@
 
 Synchronise a local directory with AWS CloudFront / S3, maintaining correct headers, etc.
 
-This project is not yet functional.
+**This project is not yet functional.**
 
 ## Goals
 

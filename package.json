@@ -1,0 +1,8 @@
+{
+  "name": "cdn-sync",
+  "version": "0.0.1",
+  "dependencies": {
+    "aws-sdk": "~0.9",
+    "q": "~0.8"
+  }
+}

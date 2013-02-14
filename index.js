@@ -9,7 +9,7 @@ var fs = require('fs'),
 
 // this module
 
-var config = require(path.join('libs', 'config'));
+var config = require(path.join(__dirname, 'libs', 'config'));
 
 // TODO: scan all visible files in directory to be synchronised
 

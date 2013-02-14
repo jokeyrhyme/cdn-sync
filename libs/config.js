@@ -15,7 +15,7 @@ var filename = '.cdn-sync.json';
 
 // TODO: confirm that isRoot test (below) works in Windows
 
-var cwd = __dirname,
+var cwd = process.cwd(),
     file = path.join(cwd, filename),
     isExists = fs.existsSync(file),
     isRoot = fs.realpathSync(cwd) === '/';

@@ -25,12 +25,9 @@ var readdir = Q.nfbind(fs.readdir),
 var config = require(path.join(__dirname, 'libs', 'config')),
     files = [],
     cwd = process.cwd(),
-    crd = '', // current relative directory
-    s3 = new AWS.S3.Client();
+    crd = ''; // current relative directory
 
 // TODO: scan all visible files in directory to be synchronised
-
-console.log(config);
 
 function processFiles(crd, files) {
   files.forEach(function(filename) {

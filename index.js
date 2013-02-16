@@ -72,8 +72,6 @@ readdir(cwd).then(function(files) {
   processFiles(crd, files);
 });
 
-  // TODO: populate array of CDNFiles
-
 // TODO: create worker threads
 
   // TODO: worker asks main thread for a CDNFile

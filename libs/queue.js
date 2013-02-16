@@ -20,6 +20,15 @@ var Queue = function() {
 
 Queue.prototype = Object.create(events.EventEmitter.prototype);
 
+Queue.prototype.pokeJobs = function() {
+  var self = this;
+  process.nextTick(function() {
+    if (self.jobs.length) {
+      self.emit('occupied');
+    }
+  });
+};
+
 /**
  * @param {Function} job that needs to be queued.
  */
@@ -28,21 +37,13 @@ Queue.prototype.push = function(job) {
   if (typeof job === 'function') {
     this.jobs.push(job);
   }
-  if (this.jobs.length) {
-    process.nextTick(function() {
-      self.emit('occupied');
-    });
-  }
+  this.pokeJobs();
 };
 
 Queue.prototype.shift = function() {
   var self = this,
       job = this.jobs.shift();
-  if (this.jobs.length) {
-    process.nextTick(function() {
-      self.emit('occupied');
-    });
-  }
+  this.pokeJobs();
   return job;
 };
 

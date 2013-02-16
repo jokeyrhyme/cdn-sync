@@ -59,7 +59,7 @@ function processFiles(crd, files) {
           file.setMIME(result);
           config.targets.forEach(function(target) {
             queue.push(function() {
-              target.checkFile(file);
+              return target.checkFile(file);
             });
           });
         });

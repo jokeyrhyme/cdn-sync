@@ -47,6 +47,7 @@ var Target = function(config) {
 
 Target.prototype.checkFile = function(file) {
   var self = this,
+      dfrd = Q.defer(),
       host = this.cfg.bucket + '.' + this.s3.endpoint.host,
       options = {
         hostname: host,
@@ -69,13 +70,13 @@ Target.prototype.checkFile = function(file) {
     if (file.isDirty) {
       self.files.push(file);
     }
-  })
-  .fail(function(e) {
-    console.log(e.message);
+    dfrd.resolve();
+  }, function(e) {
+    dfrd.reject(e.message);
   });
-
+  return dfrd.promise;
 };
 
 // exports
 
-module.exports = exports = Target;
+module.exports = Target;

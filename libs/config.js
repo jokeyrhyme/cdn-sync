@@ -60,4 +60,4 @@ config.targets.forEach(function(value, index, array) {
 
 // exports
 
-module.exports = exports = config;
+module.exports = config;

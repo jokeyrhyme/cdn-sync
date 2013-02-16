@@ -12,7 +12,9 @@ var Q = require('q'),
 
 // custom modules
 
-var File = require(path.join(__dirname, 'libs', 'file'));
+var File = require(path.join(__dirname, 'libs', 'file')),
+    Queue = require(path.join(__dirname, 'libs', 'queue')),
+    Worker = require(path.join(__dirname, 'libs', 'worker'));
 
 // promise-bound anti-callbacks
 
@@ -23,9 +25,14 @@ var readdir = Q.nfbind(fs.readdir),
 // this module
 
 var config = require(path.join(__dirname, 'libs', 'config')),
+    queue = new Queue(),
+    worker,
     files = [],
     cwd = process.cwd(),
     crd = ''; // current relative directory
+
+worker = new Worker(queue);
+worker = new Worker(queue);
 
 // TODO: scan all visible files in directory to be synchronised
 
@@ -51,7 +58,9 @@ function processFiles(crd, files) {
         Q.ninvoke(magic, 'detectFile', path.join(cwd, crd, filename)).then(function(result) {
           file.setMIME(result);
           config.targets.forEach(function(target) {
-            target.checkFile(file);
+            queue.push(function() {
+              target.checkFile(file);
+            });
           });
         });
       }

@@ -42,6 +42,25 @@ var File = function(options) {
   return this;
 };
 
+File.prototype.toString = function() {
+  var string = '',
+      mime = this.mime;
+
+  mime = mime.replace('application', 'app.');
+  mime = mime.replace('javascript', 'js.');
+  if (this.action === 'PUT') {
+    string += '+';
+  }
+  if (this.action === 'DELETE') {
+    string += '-';
+  }
+  string += this.path + ': ';
+  string += '#' + this.md5.substr(0, 6) + ' ';
+  string += this.size + ' ';
+  string += mime;
+  return string;
+};
+
 File.prototype.setMIME = function(mime) {
   var parts,
       ext;

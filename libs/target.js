@@ -45,7 +45,11 @@ var Target = function(config) {
   return this;
 };
 
-Target.prototype.checkFile = function(file) {
+Target.prototype.setQueue = function(queue) {
+  this.queue = queue;
+};
+
+Target.prototype._checkFile = function(file) {
   var self = this,
       dfrd = Q.defer(),
       host = this.cfg.bucket + '.' + this.s3.endpoint.host,
@@ -71,10 +75,20 @@ Target.prototype.checkFile = function(file) {
       self.files.push(file);
     }
     dfrd.resolve();
-  }, function(e) {
+  }).fail(function(e) {
     dfrd.reject(e.message);
   });
   return dfrd.promise;
+};
+
+Target.prototype.checkFile = function(file) {
+  var self = this,
+      job;
+
+  job = this.queue.push(function() {
+    return self._checkFile(file);
+  });
+  return job.promise;
 };
 
 // exports

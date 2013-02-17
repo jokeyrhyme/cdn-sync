@@ -30,6 +30,9 @@ var config = require(path.join(__dirname, 'libs', 'config')),
 
 worker = new Worker(queue);
 worker = new Worker(queue);
+config.targets.forEach(function(target) {
+  target.setQueue(queue);
+});
 
 // TODO: scan all visible files in directory to be synchronised
 

@@ -7,26 +7,15 @@ var fs = require('fs'),
 // 3rd-party modules
 
 var Q = require('q'),
+    color = require('colorful').color,
+    logging = require('colorful').logging,
     AWS = require('aws-sdk');
 
 // custom modules
 
+var File = require(path.join(__dirname, 'file'));
+
 // promise-bound anti-callbacks
-
-function request(options) {
-  var dfrd = Q.defer(),
-      req;
-
-  req = http.request(options, function(res) {
-    dfrd.resolve(res);
-  });
-  req.on('error', function(e) {
-    dfrd.reject(e);
-  });
-  req.end();
-
-  return dfrd.promise;
-}
 
 // this module
 
@@ -49,38 +38,57 @@ Target.prototype.setQueue = function(queue) {
   this.queue = queue;
 };
 
-Target.prototype._checkFile = function(file) {
+Target.prototype._checkFile = function(f) {
   var self = this,
       dfrd = Q.defer(),
       host = this.cfg.bucket + '.' + this.s3.endpoint.host,
+      file = new File(f),
       options = {
         hostname: host,
         path: '/' + file.path
-      },
-      req;
+      };
 
-  console.log(file);
-  request(options)
-  .then(function(res) {
+  req = http.request(options, function(res) {
+    logging.start(file.path + ' -> '+ self.cfg.bucket);
     if (res.statusCode !== 200) {
+      logging.warn(res.statusCode);
       file.action = 'PUT';
       file.isDirty = true;
-    }
-    //console.log(res.headers);
-    if (res.headers['content-type'] !== file.mime) {
+    } else if (res.headers['content-length'] !== String(file.size)) {
+      logging.warn(res.headers['content-length']);
+      file.action = 'PUT';
+      file.isDirty = true;
+    } else if (res.headers.etag !== ('"' + file.md5 + '"')) {
+      logging.warn(res.headers.etag);
+      file.action = 'PUT';
+      file.isDirty = true;
+    } else if (res.headers['content-type'] !== file.mime) {
+      logging.warn(res.headers['content-type']);
       file.headers['Content-Type'] = file.mime;
       file.isDirty = true;
     }
     if (file.isDirty) {
+      if (file.action === 'PUT') {
+        file.headers['Content-Type'] = file.mime;
+      }
       self.files.push(file);
     }
+    logging.end(String(file));
     dfrd.resolve();
-  }).fail(function(e) {
-    dfrd.reject(e.message);
   });
+
+  req.on('error', function(err) {
+    dfrd.reject(err.message);
+  });
+
+  req.end();
+
   return dfrd.promise;
 };
 
+/**
+ * queued version of _checkFile
+ */
 Target.prototype.checkFile = function(file) {
   var self = this,
       job;

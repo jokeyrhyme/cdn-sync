@@ -19,21 +19,31 @@ var Q = require('q'),
  */
 var File = function(options) {
   var self = this,
-      dfrd = Q.defer();
-      dfrdMagic = Q.defer();
+      dfrd = Q.defer(),
+      promises = [];
 
   this.localPath = options.localPath || '';
   this.path = options.path || '';
   this.mime = '';
+  this.md5 = '';
   this.size = options.size;
   this.action = ''; // 'PUT' or 'DELETE'
   this.headers = {}; // only those missing from destination
   this.promise = dfrd.promise;
 
-  Q.all([
-    this.calculateMD5(),
-    this.detectMIME()
-  ]).then(function() {
+  if (options.mime) {
+    this.mime = options.mime;
+  } else if (this.localPath) {
+    promises.push(this.detectMIME());
+  }
+
+  if (options.md5) {
+    this.md5 = options.md5;
+  } else if (this.localPath) {
+    promises.push(this.calculateMD5());
+  }
+
+  Q.all(promises).then(function() {
     process.nextTick(function() {
       dfrd.resolve(self);
     });

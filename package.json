@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "aws-sdk": "~0.9",
+    "colorful": "~1.2",
     "mmmagic": "~0.2",
     "q": "~0.8"
   },

@@ -12,6 +12,13 @@ var Q = require('q');
 
 // this module
 
+var Job = function(fn) {
+  this.fn = fn;
+  this.dfrd = Q.defer();
+  this.promise = this.dfrd.promise;
+  return this;
+};
+
 var Queue = function() {
   this.jobs = [];
   events.EventEmitter.call(this);
@@ -30,14 +37,19 @@ Queue.prototype.pokeJobs = function() {
 };
 
 /**
- * @param {Function} job that needs to be queued.
+ * @param {Function} fn job that needs to be queued.
  */
-Queue.prototype.push = function(job) {
-  var self = this;
-  if (typeof job === 'function') {
+Queue.prototype.push = function(fn) {
+  var self = this,
+      dfrd = Q.defer(),
+      job;
+
+  if (typeof fn === 'function') {
+    job = new Job(fn);
     this.jobs.push(job);
   }
   this.pokeJobs();
+  return job;
 };
 
 Queue.prototype.shift = function() {

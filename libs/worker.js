@@ -38,13 +38,19 @@ Worker.prototype.checkQueue = function() {
         });
       };
 
-  if (typeof job === 'function') {
-    result = job();
-    if (Q.isPromise(result)) {
-      result.then(next, next);
-    } else {
-      next();
-    }
+  if (!job) {
+    return;
+  }
+  result = job.fn();
+  if (Q.isPromise(result)) {
+    result.then(function() {
+      job.dfrd.resolve.apply(dfrd, arguments);
+    }).fail(function() {
+      job.dfrd.resolve.apply(dfrd, arguments);
+    });
+  } else {
+    job.dfrd.resolve(result);
+    next();
   }
 };
 

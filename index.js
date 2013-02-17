@@ -69,7 +69,7 @@ function processFiles(crd, files) {
       }
     }).fail(function(err) {
       throw err;
-    });
+    }).done();
   });
 }
 

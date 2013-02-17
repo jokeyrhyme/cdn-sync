@@ -27,9 +27,16 @@ var File = function(options) {
   this.mime = '';
   this.md5 = '';
   this.size = options.size;
-  this.action = ''; // 'PUT' or 'DELETE'
-  this.headers = {}; // only those missing from destination
+  this.action = options.action || ''; // 'PUT' or 'DELETE'
+  this.headers = null; // only those missing from destination
   this.promise = dfrd.promise;
+  this.isDirty = options.isDirty || false;
+
+  if (options.headers) {
+    this.headers = JSON.parse(JSON.stringify(options.headers));
+  } else {
+    this.headers = {};
+  }
 
   if (options.mime) {
     this.mime = options.mime;
@@ -60,9 +67,10 @@ File.prototype.toString = function() {
   mime = mime.replace('javascript', 'js.');
   if (this.action === 'PUT') {
     string += '+';
-  }
-  if (this.action === 'DELETE') {
+  } else if (this.action === 'DELETE') {
     string += '-';
+  } else if (Object.keys(this.headers).length) {
+    string += '*';
   }
   string += this.path + ': ';
   string += '#' + this.md5.substr(0, 6) + ' ';

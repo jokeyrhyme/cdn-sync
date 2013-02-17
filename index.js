@@ -6,9 +6,7 @@ var fs = require('fs'),
 // 3rd-party modules
 
 var Q = require('q'),
-    AWS = require('aws-sdk'),
-    mmm = require('mmmagic'),
-    magic = new mmm.Magic(mmm.MAGIC_MIME_TYPE);
+    AWS = require('aws-sdk');
 
 // custom modules
 
@@ -19,8 +17,7 @@ var File = require(path.join(__dirname, 'libs', 'file')),
 // promise-bound anti-callbacks
 
 var readdir = Q.nfbind(fs.readdir),
-    stat = Q.nfbind(fs.stat),
-    detectFile = Q.nfbind(magic.detectFile);
+    stat = Q.nfbind(fs.stat);
 
 // this module
 
@@ -54,16 +51,21 @@ function processFiles(crd, files) {
         });
       }
       if (stats.isFile()) {
-        file = new File(path.join(crd, filename));
-        Q.ninvoke(magic, 'detectFile', path.join(cwd, crd, filename)).then(function(result) {
-          file.setMIME(result);
+        file = new File({
+          localPath: path.join(cwd, crd, filename),
+          path: path.join(crd, filename),
+          size: stats.size
+        });
+        file.promise.then(function(file) {
           config.targets.forEach(function(target) {
-            queue.push(function() {
-              return target.checkFile(file);
-            });
+            target.checkFile(file);
           });
+        }).fail(function(err) {
+          throw err;
         });
       }
+    }).fail(function(err) {
+      throw err;
     });
   });
 }

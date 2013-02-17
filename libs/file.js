@@ -64,7 +64,7 @@ File.prototype.toString = function() {
 File.prototype.setMIME = function(mime) {
   var parts,
       ext;
-  if (mime === 'text/plain') {
+  if (mime.indexOf('text/') === 0) {
     parts = this.path.split('.');
     ext = parts[parts.length - 1];
     switch (ext) {

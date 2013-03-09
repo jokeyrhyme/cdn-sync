@@ -59,6 +59,10 @@ var File = function(options) {
   return this;
 };
 
+File.prototype.clone = function() {
+  return new File(this);
+};
+
 File.prototype.toString = function() {
   var string = '',
       mime = this.mime;

@@ -23,61 +23,82 @@ var readdir = Q.nfbind(fs.readdir),
 
 var config = require(path.join(__dirname, 'libs', 'config')),
     queue = new Queue(),
-    worker,
+    workers = [],
     files = [],
     cwd = process.cwd(),
     crd = ''; // current relative directory
 
-worker = new Worker(queue);
-worker = new Worker(queue);
 config.targets.forEach(function(target) {
   target.setQueue(queue);
 });
 
-// TODO: scan all visible files in directory to be synchronised
+// http://stackoverflow.com/questions/5827612/node-js-fs-readdir-recursive-directory-search
+var walkDir = function(dir, done) {
+  var dfrd = Q.defer(),
+      results = [];
 
-function processFiles(crd, files) {
-  files.forEach(function(filename) {
-    if (filename[0] === '.') {
-      return; // skip hidden files
+  readdir(dir).done(function(list) {
+    var pending = list.length;
+    if (!pending) {
+      return dfrd.resolve(results);
     }
-    stat(path.join(cwd, crd, filename)).then(function(stats) {
-      var nextDir,
-          nextRel,
-          file;
-
-      if (stats.isDirectory()) {
-        nextRel = path.join(crd, filename);
-        nextDir = path.join(cwd, nextRel);
-        readdir(nextDir).then(function(files) {
-          processFiles(nextRel, files);
-        });
-      }
-      if (stats.isFile()) {
-        file = new File({
-          localPath: path.join(cwd, crd, filename),
-          path: path.join(crd, filename),
-          size: stats.size
-        });
-        file.promise.then(function(file) {
-          config.targets.forEach(function(target) {
-            target.checkFile(file);
+    list.forEach(function(file) {
+      file = dir + '/' + file;
+      stat(file).done(function(stat) {
+        if (stat && stat.isDirectory()) {
+          walkDir(file).done(function(res) {
+            results = results.concat(res);
+            pending -= 1;
+            if (!pending) {
+              dfrd.resolve(results);
+            }
           });
-        }).fail(function(err) {
-          throw err;
-        });
-      }
-    }).fail(function(err) {
-      throw err;
-    }).done();
+        } else {
+          pending -= 1;
+          if (path.basename(file)[0] !== '.') {
+            results.push(new File({
+              localPath: file,
+              path: file.replace(config.path + path.sep, ''),
+              size: stat.size
+            }));
+          }
+          if (!pending) {
+            dfrd.resolve(results);
+          }
+        }
+      });
+    });
   });
-}
+  return dfrd.promise;
+};
 
-readdir(cwd).then(function(files) {
-  processFiles(crd, files);
-});
+// create worker threads
 
-// TODO: create worker threads
+workers.push(new Worker(queue));
+workers.push(new Worker(queue));
+
+// traverse directory hunting for files
+
+walkDir(cwd)
+    .then(function (files) {
+      // wait for files to be hashed and MIME'd
+      return Q.all(files.map(function (file) {
+        return file.promise;
+      }));
+    })
+    .then(function (files) {
+      // wait for files to be checked against targets
+      var checks = [];
+      config.targets.forEach(function (target) {
+        files.forEach(function (file) {
+          checks.push(target.checkFile(file.clone()));
+        });
+      });
+      return Q.all(checks);
+    })
+    .done(function () {
+      console.log('DONE!');
+    });
 
   // TODO: worker asks main thread for a CDNFile
 

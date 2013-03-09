@@ -25,6 +25,7 @@ var File = require(path.join(__dirname, 'file'));
 var Target = function(config) {
   this.cfg = config;
   this.files = [];
+  this.oldFiles = [];
   this.s3 = new AWS.S3.Client({
     accessKeyId: config.principle,
     secretAccessKey: config.credential,
@@ -97,6 +98,60 @@ Target.prototype.checkFile = function(file) {
     return self._checkFile(file);
   });
   return job.promise;
+};
+
+Target.prototype.listFiles = function(options) {
+  var self = this,
+      dfrd = Q.defer();
+
+  options = options || {};
+  options.Bucket = this.cfg.bucket;
+  options.MaxKeys = 2;
+
+  this.s3.listObjects(options, function(err, res) {
+    if (err) {
+      return dfrd.reject(err);
+    }
+    res.Contents.forEach(function(obj) {
+      var file = new File({
+        path: obj.Key,
+        md5: obj.ETag,
+        size: obj.Size
+      });
+      self.oldFiles.push(file);
+    });
+//    if (res.isTruncated) {
+      // TODO: do another request
+//    }
+  });
+
+  return dfrd.promise;
+};
+
+/**
+ */
+Target.prototype._deleteFile = function(path) {
+  var self = this,
+      dfrd = Q.defer();
+
+  return dfrd.promise;
+};
+
+/**
+ * queued version of _deleteFile
+ */
+Target.prototype.deleteFile = function(path) {
+  var self = this,
+      job;
+
+  job = this.queue.push(function() {
+    return self._deleteFile(path);
+  });
+  return job.promise;
+};
+
+Target.prototype.synchronise = function() {
+  
 };
 
 // exports

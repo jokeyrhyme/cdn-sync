@@ -20,13 +20,15 @@ var filename = '.cdn-sync.json';
 var cwd = process.cwd(),
     file = path.join(cwd, filename),
     isExists = fs.existsSync(file),
-    isRoot = fs.realpathSync(cwd) === '/';
+    cfgPath = fs.realpathSync(cwd),
+    isRoot = cfgPath === '/';
 
 while (!isExists && !isRoot) {
   cwd = path.join(cwd, '..');
   file = path.join(cwd, filename);
   isExists = fs.existsSync(file);
-  isRoot = fs.realpathSync(cwd) === '/';
+  cfgPath = fs.realpathSync(cwd);
+  isRoot = cfgPath === '/';
 }
 
 var config = {};
@@ -42,6 +44,8 @@ if (isExists) {
   console.error('.cdn-sync.json could not be found');
   process.exit(1);
 }
+
+config.path = cfgPath;
 
 // TODO: confirm that configuration is valid
 

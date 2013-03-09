@@ -27,8 +27,10 @@ var Target = function(config) {
   this.files = [];
   this.oldFiles = [];
   this.s3 = new AWS.S3.Client({
-    accessKeyId: config.principle,
-    secretAccessKey: config.credential,
+    credentials: {
+      accessKeyId: config.principal,
+      secretAccessKey: config.credential
+    },
     region: config.region,
     sslEnabled: true
   });

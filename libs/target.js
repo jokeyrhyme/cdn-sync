@@ -102,32 +102,54 @@ Target.prototype.checkFile = function(file) {
   return job.promise;
 };
 
-Target.prototype.listFiles = function(options) {
+Target.prototype._listFiles = function(options) {
   var self = this,
       dfrd = Q.defer();
 
   options = options || {};
   options.Bucket = this.cfg.bucket;
-  options.MaxKeys = 2;
 
   this.s3.listObjects(options, function(err, res) {
     if (err) {
       return dfrd.reject(err);
     }
+    if (!Array.isArray(res.Contents)) {
+      return dfrd.resolve();
+    }
     res.Contents.forEach(function(obj) {
-      var file = new File({
-        path: obj.Key,
-        md5: obj.ETag,
-        size: obj.Size
-      });
-      self.oldFiles.push(file);
+      var file;
+      if (obj.Key[obj.Key.length - 1] !== '/') {
+        file = new File({
+          path: obj.Key,
+          md5: obj.ETag,
+          size: obj.Size
+        });
+        self.oldFiles.push(file);
+      }
     });
-//    if (res.isTruncated) {
-      // TODO: do another request
-//    }
+    if (res.IsTruncated) {
+      options.Marker = self.oldFiles[self.oldFiles.length - 1].path;
+      self._listFiles(options).done(function() {
+        dfrd.resolve();
+      });
+    } else {
+      dfrd.resolve();
+    }
   });
-
   return dfrd.promise;
+};
+
+/**
+ * queued version of _checkFile
+ */
+Target.prototype.listFiles = function(options) {
+  var self = this,
+      job;
+
+  job = this.queue.push(function() {
+    return self._listFiles(options);
+  });
+  return job.promise;
 };
 
 /**

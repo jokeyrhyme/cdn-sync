@@ -105,6 +105,8 @@ File.prototype.setMIME = function(mime) {
       default:
         this.mime = mime;
     }
+  } else if (mime.indexOf('x-empty') !== -1) {
+    this.mime = 'text/plain';
   } else {
     this.mime = mime;
   }

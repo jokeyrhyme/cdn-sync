@@ -112,10 +112,4 @@ walkDir(cwd)
       });
     });
 
-  // TODO: worker asks main thread for a CDNFile
-
-  // TODO: worker uses CDN to process CDNFile
-
-  // TODO: worker cleans up and then asks for next CDNFile
-
-// TODO: use CDN to trigger post-sync clean-up (e.g. invalidation)
+// TODO: once invalidation lists have been compiled, queue them and issue them one by one

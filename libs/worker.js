@@ -43,10 +43,8 @@ Worker.prototype.checkQueue = function() {
   }
   result = job.fn();
   if (Q.isPromise(result)) {
-    result.then(function() {
+    result.done(function() {
       job.dfrd.resolve.apply(job.dfrd, arguments);
-    }, function() {
-      job.dfrd.reject.apply(job.dfrd, arguments);
     });
   } else {
     job.dfrd.resolve(result);

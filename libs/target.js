@@ -6,7 +6,8 @@ var fs = require('fs'),
 
 // 3rd-party modules
 
-var Q = require('q'),
+var _ = require('underscore'),
+    Q = require('q'),
     color = require('colorful').color,
     logging = require('colorful').logging,
     AWS = require('aws-sdk');
@@ -26,6 +27,7 @@ var Target = function(config) {
   this.cfg = config;
   this.files = [];
   this.oldFiles = [];
+  this.deletes = [];
   this.s3 = new AWS.S3.Client({
     credentials: {
       accessKeyId: config.principal,
@@ -36,13 +38,11 @@ var Target = function(config) {
   });
   this.dfrds = {
     files: Q.defer(),
-    listRemotes: Q.defer(),
-    remoteHeaders: Q.defer()
+    listRemotes: Q.defer()
   };
   this.promises = {
     files: this.dfrds.files.promise,
-    listRemotes: this.dfrds.listRemotes.promise,
-    remoteHeaders: this.dfrds.remoteHeaders.promise
+    listRemotes: this.dfrds.listRemotes.promise
   };
   return this;
 };
@@ -86,8 +86,8 @@ Target.prototype.checkFile = function(file) {
       if (file.action === 'PUT') {
         file.headers['Content-Type'] = file.mime;
       }
-      self.files.push(file);
     }
+    self.files.push(file);
     logging.end(String(file));
     dfrd.resolve();
   });
@@ -148,7 +148,32 @@ Target.prototype.deleteFile = function(path) {
 };
 
 Target.prototype.synchronise = function() {
-  
+  var self = this,
+      dfrd = Q.defer();
+
+  Q.all([
+        this.promises.files,
+        this.promises.listRemotes
+      ]).done(function() {
+    console.log('synchronise');
+    self.oldFiles.forEach(function(remote) {
+      var local = _.find(self.files, function(file) {
+        return file.path === remote.path;
+      });
+
+      if (!local) {
+        self.deletes.push(remote);
+      }
+    });
+    console.log('delete', self.deletes);
+
+        // TODO: delete all files in this.deletes
+        // TODO: upload all PUT files in this.files
+        // TODO: fix metadata / headers for remaining dirty files in this.files
+        // TODO: generate invalidation list for files modified just now
+  });
+
+  return dfrd.promise;
 };
 
 // exports

@@ -4,7 +4,8 @@ var events = require('events');
 
 // 3rd-party modules
 
-var Q = require('q');
+var _ = require('underscore'),
+    Q = require('q');
 
 // custom modules
 
@@ -57,6 +58,29 @@ Queue.prototype.shift = function() {
       job = this.jobs.shift();
   this.pokeJobs();
   return job;
+};
+
+/**
+ * @param {Object} context the value of "this" to maintain.
+ * @param {Function|String} method the function, method or name of a method to run.
+ * @returns {Function} a queue-wrapped version of that provided method.
+ */
+Queue.prototype.bind = function(context, method) {
+  var self = this;
+
+  if (typeof method === 'string') {
+    method = context[method];
+  }
+
+  return function() {
+    var args = _.toArray(arguments),
+        job;
+
+    job = self.push(function() {
+      return method.apply(context, args);
+    });
+    return job.promise;
+  };
 };
 
 // exports

@@ -39,13 +39,15 @@ var Target = function(config) {
 
 Target.prototype.setQueue = function(queue) {
   this.queue = queue;
+  this.checkFile = this.queue.bind(this, this.checkFile);
+  this.deleteFile = this.queue.bind(this, this.deleteFile);
+  this.listFiles = this.queue.bind(this, this.listFiles);
 };
 
-Target.prototype._checkFile = function(f) {
+Target.prototype.checkFile = function(file) {
   var self = this,
       dfrd = Q.defer(),
       host = this.cfg.bucket + '.' + this.s3.endpoint.host,
-      file = new File(f),
       options = {
         hostname: host,
         path: '/' + file.path
@@ -89,20 +91,7 @@ Target.prototype._checkFile = function(f) {
   return dfrd.promise;
 };
 
-/**
- * queued version of _checkFile
- */
-Target.prototype.checkFile = function(file) {
-  var self = this,
-      job;
-
-  job = this.queue.push(function() {
-    return self._checkFile(file);
-  });
-  return job.promise;
-};
-
-Target.prototype._listFiles = function(options) {
+Target.prototype.listFiles = function(options) {
   var self = this,
       dfrd = Q.defer();
 
@@ -129,7 +118,7 @@ Target.prototype._listFiles = function(options) {
     });
     if (res.IsTruncated) {
       options.Marker = self.oldFiles[self.oldFiles.length - 1].path;
-      self._listFiles(options).done(function() {
+      self.listFiles(options).done(function() {
         dfrd.resolve();
       });
     } else {
@@ -140,38 +129,12 @@ Target.prototype._listFiles = function(options) {
 };
 
 /**
- * queued version of _checkFile
  */
-Target.prototype.listFiles = function(options) {
-  var self = this,
-      job;
-
-  job = this.queue.push(function() {
-    return self._listFiles(options);
-  });
-  return job.promise;
-};
-
-/**
- */
-Target.prototype._deleteFile = function(path) {
+Target.prototype.deleteFile = function(path) {
   var self = this,
       dfrd = Q.defer();
 
   return dfrd.promise;
-};
-
-/**
- * queued version of _deleteFile
- */
-Target.prototype.deleteFile = function(path) {
-  var self = this,
-      job;
-
-  job = this.queue.push(function() {
-    return self._deleteFile(path);
-  });
-  return job.promise;
 };
 
 Target.prototype.synchronise = function() {

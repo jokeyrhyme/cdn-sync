@@ -34,6 +34,16 @@ var Target = function(config) {
     region: config.region,
     sslEnabled: true
   });
+  this.dfrds = {
+    files: Q.defer(),
+    listRemotes: Q.defer(),
+    remoteHeaders: Q.defer()
+  };
+  this.promises = {
+    files: this.dfrds.files.promise,
+    listRemotes: this.dfrds.listRemotes.promise,
+    remoteHeaders: this.dfrds.remoteHeaders.promise
+  };
   return this;
 };
 

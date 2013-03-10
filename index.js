@@ -77,6 +77,15 @@ var walkDir = function(dir, done) {
 workers.push(new Worker(queue));
 workers.push(new Worker(queue));
 
+// check target CDNs for files that already exist there
+
+config.targets.forEach(function (target) {
+  target.listFiles().done(function() {
+    target.dfrds.listRemotes.resolve();
+  });
+  target.synchronise();
+});
+
 // traverse directory hunting for files
 
 walkDir(cwd)
@@ -98,6 +107,9 @@ walkDir(cwd)
     })
     .done(function () {
       console.log('DONE!');
+      config.targets.forEach(function (target) {
+        target.dfrds.files.resolve();
+      });
     });
 
   // TODO: worker asks main thread for a CDNFile

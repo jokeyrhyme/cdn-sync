@@ -11,6 +11,10 @@ var Q = require('q'),
 
 // custom modules
 
+// promise-bound anti-callbacks
+
+var detectFile = Q.nbind(magic.detectFile, magic);
+
 // this module
 
 /**
@@ -116,13 +120,14 @@ File.prototype.detectMIME = function() {
   var self = this,
       dfrd = Q.defer();
 
-  Q.ninvoke(magic, 'detectFile', this.localPath)
-  .then(function(result) {
-    self.setMIME(result);
-    dfrd.resolve();
-  }).fail(function(err) {
-    dfrd.reject(err);
-  }).done();
+  detectFile(this.localPath)
+    .then(function (result) {
+      self.setMIME(result);
+      dfrd.resolve();
+    }).fail(function (err) {
+      dfrd.reject(err);
+    }).done();
+
   return dfrd.promise;
 };
 

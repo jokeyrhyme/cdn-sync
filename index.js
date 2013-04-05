@@ -16,8 +16,8 @@ var File = require(path.join(__dirname, 'libs', 'file')),
 
 // promise-bound anti-callbacks
 
-var readdir = Q.nfbind(fs.readdir),
-  stat = Q.nfbind(fs.stat);
+var readdir = Q.nbind(fs.readdir, fs),
+  stat = Q.nbind(fs.stat, fs);
 
 // this module
 

@@ -5,13 +5,13 @@
     "cdn-sync": "./index.js"
   },
   "engines": {
-    "node": ">=0.7.0 <0.9.0"
+    "node": ">=0.9.0 <0.11.0"
   },
   "dependencies": {
     "aws-sdk": "~0.9",
-    "colorful": "~1.2",
-    "mmmagic": "~0.2",
-    "q": "~0.8",
+    "colorful": "~2.0",
+    "mmmagic": "~0.3",
+    "q": "~0.9",
     "underscore": "~1.4"
   },
   "devDependencies": {},

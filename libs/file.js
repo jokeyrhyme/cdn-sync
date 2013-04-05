@@ -1,13 +1,13 @@
 // Node.JS standard modules
 
 var crypto = require('crypto'),
-    fs = require('fs');
+  fs = require('fs');
 
 // 3rd-party modules
 
 var Q = require('q'),
-    mmm = require('mmmagic'),
-    magic = new mmm.Magic(mmm.MAGIC_MIME_TYPE);
+  mmm = require('mmmagic'),
+  magic = new mmm.Magic(mmm.MAGIC_MIME_TYPE);
 
 // custom modules
 
@@ -21,10 +21,11 @@ var detectFile = Q.nbind(magic.detectFile, magic);
  * represents an individual file in the CDN, with required actions
  * @constructor
  */
-var File = function(options) {
+var File = function (options) {
+  'use strict';
   var self = this,
-      dfrd = Q.defer(),
-      promises = [];
+    dfrd = Q.defer(),
+    promises = [];
 
   this.localPath = options.localPath || '';
   this.path = options.path || '';
@@ -54,8 +55,8 @@ var File = function(options) {
     promises.push(this.calculateMD5());
   }
 
-  Q.all(promises).then(function() {
-    process.nextTick(function() {
+  Q.all(promises).then(function () {
+    process.nextTick(function () {
       dfrd.resolve(self);
     });
   });
@@ -63,13 +64,15 @@ var File = function(options) {
   return this;
 };
 
-File.prototype.clone = function() {
+File.prototype.clone = function () {
+  'use strict';
   return new File(this);
 };
 
-File.prototype.toString = function() {
+File.prototype.toString = function () {
+  'use strict';
   var string = '',
-      mime = this.mime;
+    mime = this.mime;
 
   mime = mime.replace('application', 'app.');
   mime = mime.replace('javascript', 'js.');
@@ -87,27 +90,29 @@ File.prototype.toString = function() {
   return string;
 };
 
-File.prototype.setMIME = function(mime) {
+File.prototype.setMIME = function (mime) {
+  'use strict';
   var parts,
-      ext;
+    ext;
+
   if (mime.indexOf('text/') === 0) {
     parts = this.path.split('.');
     ext = parts[parts.length - 1];
     switch (ext) {
-      case 'css':
-        this.mime = 'text/css';
-        break;
-      case 'html':
-        this.mime = 'text/html';
-        break;
-      case 'js':
-        this.mime = 'application/javascript';
-        break;
-      case 'xml':
-        this.mime = 'application/xml';
-        break;
-      default:
-        this.mime = mime;
+    case 'css':
+      this.mime = 'text/css';
+      break;
+    case 'html':
+      this.mime = 'text/html';
+      break;
+    case 'js':
+      this.mime = 'application/javascript';
+      break;
+    case 'xml':
+      this.mime = 'application/xml';
+      break;
+    default:
+      this.mime = mime;
     }
   } else if (mime.indexOf('x-empty') !== -1) {
     this.mime = 'text/plain';
@@ -116,9 +121,10 @@ File.prototype.setMIME = function(mime) {
   }
 };
 
-File.prototype.detectMIME = function() {
+File.prototype.detectMIME = function () {
+  'use strict';
   var self = this,
-      dfrd = Q.defer();
+    dfrd = Q.defer();
 
   detectFile(this.localPath)
     .then(function (result) {
@@ -131,20 +137,21 @@ File.prototype.detectMIME = function() {
   return dfrd.promise;
 };
 
-File.prototype.calculateMD5 = function() {
+File.prototype.calculateMD5 = function () {
+  'use strict';
   var self = this,
-      dfrd = Q.defer(),
-      md5 = crypto.createHash('md5'),
-      rs;
+    dfrd = Q.defer(),
+    md5 = crypto.createHash('md5'),
+    rs;
 
   rs = fs.createReadStream(this.localPath);
-  rs.on('error', function(err) {
+  rs.on('error', function (err) {
     dfrd.reject(err);
   });
-  rs.on('data', function(data) {
+  rs.on('data', function (data) {
     md5.update(data);
   });
-  rs.once('end', function() {
+  rs.once('end', function () {
     self.md5 = md5.digest('hex');
     dfrd.resolve();
   });

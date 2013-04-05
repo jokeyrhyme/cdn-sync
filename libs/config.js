@@ -1,9 +1,11 @@
 // Node.JS standard modules
 
 var fs = require('fs'),
-    path = require('path');
+  path = require('path');
 
 // 3rd-party modules
+
+var findup = require('findup-sync');
 
 // custom modules
 
@@ -13,27 +15,12 @@ var Target = require(path.join(__dirname, 'target'));
 
 // find .cdn-sync.json
 
-var filename = '.cdn-sync.json';
-
-// TODO: confirm that isRoot test (below) works in Windows
-
-var cwd = process.cwd(),
-    file = path.join(cwd, filename),
-    isExists = fs.existsSync(file),
-    cfgPath = fs.realpathSync(cwd),
-    isRoot = cfgPath === '/';
-
-while (!isExists && !isRoot) {
-  cwd = path.join(cwd, '..');
-  file = path.join(cwd, filename);
-  isExists = fs.existsSync(file);
-  cfgPath = fs.realpathSync(cwd);
-  isRoot = cfgPath === '/';
-}
+var filename = '.cdn-sync.json',
+  file = findup(filename, { nocase: true });
 
 var config = {};
 
-if (isExists) {
+if (file) {
   try {
     config = require(file);
   } catch (ex) {
@@ -45,7 +32,7 @@ if (isExists) {
   process.exit(1);
 }
 
-config.path = cfgPath;
+config.path = path.dirname(file);
 
 // TODO: confirm that configuration is valid
 

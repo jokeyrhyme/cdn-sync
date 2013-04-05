@@ -10,6 +10,7 @@
   "dependencies": {
     "aws-sdk": "~0.9",
     "colorful": "~2.0",
+    "findup-sync": "~0.1",
     "mmmagic": "~0.3",
     "q": "~0.9",
     "underscore": "~1.4"

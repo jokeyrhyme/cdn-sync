@@ -14,7 +14,9 @@
     "q": "~0.9",
     "underscore": "~1.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4"
+  },
   "peerDependencies": {},
   "repository": {
     "type": "git",

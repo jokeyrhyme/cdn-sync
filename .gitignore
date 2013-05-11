@@ -17,7 +17,9 @@ node_modules
 
 .DS_Store
 .c9revisions
-.idea
 
 .cdn-sync.json
-.idea
+
+# JetBrains IDEA files
+/.idea
+/*.iml

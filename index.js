@@ -1,3 +1,6 @@
+/*jslint es5:true, indent:2, maxlen:80, node:true*/
+/*jslint nomen:true*/ // Underscore.JS and __dirname
+'use strict';
 // Node.JS standard modules
 
 var fs = require('fs'),
@@ -10,9 +13,9 @@ var Q = require('q'),
 
 // custom modules
 
-var File = require(path.join(__dirname, 'libs', 'file')),
-  Queue = require(path.join(__dirname, 'libs', 'queue')),
-  Worker = require(path.join(__dirname, 'libs', 'worker'));
+var File = require(path.join(__dirname, 'lib', 'file')),
+  Queue = require(path.join(__dirname, 'lib', 'queue')),
+  Worker = require(path.join(__dirname, 'lib', 'worker'));
 
 // promise-bound anti-callbacks
 
@@ -21,7 +24,7 @@ var readdir = Q.nbind(fs.readdir, fs),
 
 // this module
 
-var config = require(path.join(__dirname, 'libs', 'config')),
+var config = require(path.join(__dirname, 'lib', 'config')),
   queue = new Queue(),
   workers = [],
   files = [],
@@ -32,10 +35,10 @@ config.targets.forEach(function (target) {
   target.setQueue(queue);
 });
 
-// http://stackoverflow.com/questions/5827612/node-js-fs-readdir-recursive-directory-search
+// http://stackoverflow.com/questions/5827612
 var walkDir = function (dir, done) {
   var dfrd = Q.defer(),
-      results = [];
+    results = [];
 
   readdir(dir).done(function (list) {
     var pending = list.length;
@@ -112,4 +115,4 @@ walkDir(cwd)
     });
   });
 
-// TODO: once invalidation lists have been compiled, queue them and issue them one by one
+// TODO: once invalidation lists have been compiled, queue/issue them one by one

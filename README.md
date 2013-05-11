@@ -85,3 +85,31 @@ Most browsers today support GZIP-deflated content:
 
 If you are confident that you don't need to support these ancient user agents, then you may
 skip detection completely and just assume that all of your users have modern web browsers.
+
+## Getting Started
+Install the command-line tool with: `npm -g install cdn-sync`
+
+### Configuration
+_(Coming soon)_
+
+## Documentation
+_(Coming soon)_
+
+## Examples
+_(Coming soon)_
+
+## Contributing
+Formal styleguide for this project is JSLint. See JSLint settings at the top of
+each file.
+
+Add unit tests for any new or changed functionality. Lint and test your code
+using [Grunt](http://gruntjs.com/).
+
+    grunt test
+
+## Release History
+_(Nothing yet)_
+
+## License
+Copyright (c) 2013 Ron Waldon
+Licensed under the MIT license.

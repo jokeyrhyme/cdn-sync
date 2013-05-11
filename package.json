@@ -1,14 +1,38 @@
 {
   "name": "cdn-sync",
+  "description": "deflate / synchronous assets to a CDN",
   "version": "0.0.1",
+  "homepage": "https://github.com/jokeyrhyme/cdn-sync",
+  "author": {
+    "name": "Ron Waldon",
+    "email": "jokeyrhyme@gmail.com",
+    "url": "http://jokeyrhy.me/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jokeyrhyme/cdn-sync.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jokeyrhyme/cdn-sync/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/jokeyrhyme/cdn-sync/blob/master/LICENSE-MIT"
+    }
+  ],
   "bin": {
     "cdn-sync": "./index.js"
+  },
+  "main": "lib/cdn-sync",
+  "scripts": {
+    "test": "grunt test"
   },
   "engines": {
     "node": ">=0.9.0 <0.11.0"
   },
   "dependencies": {
-    "aws-sdk": "~0.9",
+    "aws-sdk": "~1.0",
     "colorful": "~2.0",
     "findup-sync": "~0.1",
     "mmmagic": "~0.3",
@@ -16,11 +40,14 @@
     "underscore": "~1.4"
   },
   "devDependencies": {
-    "grunt": "~0.4"
+    "chai": "~1.6",
+    "grunt": "~0.4",
+    "grunt-contrib-watch": "~0.4",
+    "grunt-jslint": "~0.2",
+    "grunt-mocha-cli": "~1.0",
+    "sinon": "~1.7",
+    "sinon-chai": "~2.4"
   },
   "peerDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jokeyrhyme/cdn-sync.git"
-  }
+  "keywords": []
 }

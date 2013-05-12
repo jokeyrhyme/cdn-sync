@@ -29,45 +29,146 @@ suite('File module', function () {
 
 });
 
-suite('File objects', function () {
-  var File, md5Spy, mimeSpy;
+suite('File object: constructed with no arguments', function () {
+  var File, md5Spy, mimeSpy, file;
 
   suiteSetup(function () {
     File = require('../lib/file');
   });
 
   setup(function () {
-    // TODO: these spies aren't working
-    md5Spy = sinon.spy(File.prototype, 'calculateMD5');
-    mimeSpy = sinon.spy(File.prototype, 'detectMIME');
-  });
-
-  test('skip Magic and MD5 if constructed without local path', function () {
-    var file, spy;
-
     file = new File();
-
-    assert(!file.localPath, 'no localPath set');
-    assert.equal(md5Spy.callCount, 0, 'calculateMD5 method never called');
+    md5Spy = sinon.spy(file, 'calculateMD5');
+    mimeSpy = sinon.spy(file, 'detectMIME');
   });
 
-//  test('skip Magic if constructed with MIME type', function () {
-//    var file = new File({
-//      localPath: '../package.json',
-//      mime: 'application/json'
-//    });
-//    assert.equal(file.localPath, '../package.json', 'localPath set');
-//    assert.equal(mimeSpy.callCount, 0, 'detectMIME method never called');
-//  });
+  test('ready for use', function (done) {
+    file.promise.then(function (f) {
+      assert(true, 'ready with no failures');
+      done();
+    }, function () {
+      assert(false, 'ready but raised an error');
+      done();
+    });
+  });
 
-  test('skip Magic if constructed with MIME type', function () {
-    var file = new File({ mime: 'image/jpeg' });
+  test('no local path', function () {
+    assert(!file.localPath, 'no localPath set');
+  });
 
+  test('no MIME', function () {
+    assert(!file.mime, 'no MIME set');
+  });
+
+  test('no MD5', function () {
+    assert(!file.md5, 'no MD5 set');
+  });
+
+  test('skip calculateMD5', function () {
+    assert(!md5Spy.called, 'calculateMD5 method never called');
+  });
+
+  test('skip detectMIME', function () {
+    assert(!mimeSpy.called, 'detectMIME method never called');
   });
 
   teardown(function () {
-    File.prototype.calculateMD5.restore();
-    File.prototype.detectMIME.restore();
+    file.calculateMD5.restore();
+    file.detectMIME.restore();
+  });
+
+});
+
+suite('File object: constructed with local path and MIME', function () {
+  var File, md5Spy, mimeSpy, file;
+
+  suiteSetup(function () {
+    File = require('../lib/file');
+  });
+
+  setup(function () {
+    file = new File({
+      localPath: 'fake/path/to/file.json',
+      mime: 'application/json',
+      md5: '649530ee65cbb20c69be85ff7582fd88'
+    });
+    md5Spy = sinon.spy(file, 'calculateMD5');
+    mimeSpy = sinon.spy(file, 'detectMIME');
+  });
+
+  test('ready for use', function (done) {
+    file.promise.then(function (f) {
+      assert(true, 'ready with no failures');
+      done();
+    }, function () {
+      assert(false, 'ready but raised an error');
+      done();
+    });
+  });
+
+  test('local path set as constructed', function () {
+    assert.equal(file.localPath, 'fake/path/to/file.json', 'localPath set');
+  });
+
+  test('MIME set as constructed', function () {
+    assert.equal(file.mime, 'application/json', 'MIME set');
+  });
+
+  test('MD5 set as constructed', function () {
+    assert.equal(file.md5, '649530ee65cbb20c69be85ff7582fd88', 'MD5 set');
+  });
+
+  test('skip calculateMD5', function () {
+    assert(!md5Spy.called, 'calculateMD5 method never called');
+  });
+
+  test('skip detectMIME', function () {
+    assert(!mimeSpy.called, 'detectMIME method never called');
+  });
+
+  teardown(function () {
+    file.calculateMD5.restore();
+    file.detectMIME.restore();
+  });
+
+});
+
+suite('File object: clone', function () {
+  var File, md5Spy, mimeSpy, fileA, fileB;
+
+  suiteSetup(function () {
+    File = require('../lib/file');
+  });
+
+  setup(function () {
+    fileA = new File({
+      localPath: 'fake/path/to/file.json',
+      mime: 'application/json',
+      md5: '649530ee65cbb20c69be85ff7582fd88'
+    });
+  });
+
+  test('clone returns a File', function () {
+    fileB = fileA.clone();
+    assert(fileB instanceof File, 'new object is an instance of File');
+  });
+
+  test('local path set as cloned', function () {
+    assert.equal(fileA.localPath, fileB.localPath, 'localPath set');
+  });
+
+  test('MIME set as cloned', function () {
+    assert.equal(fileA.mime, fileB.mime, 'MIME set');
+  });
+
+  test('MD5 set as cloned', function () {
+    assert.equal(fileA.md5, fileB.md5, 'MD5 set');
+  });
+
+  test('not the same object', function () {
+    assert.notEqual(fileA, fileB, 'separate objects');
+    fileA.size = 123;
+    assert.notEqual(fileA.size, fileB.size, 'size set individually');
   });
 
 });

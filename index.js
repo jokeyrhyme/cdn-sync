@@ -3,8 +3,7 @@
 'use strict';
 // Node.JS standard modules
 
-var fs = require('fs'),
-  path = require('path');
+var path = require('path');
 
 // 3rd-party modules
 
@@ -13,67 +12,22 @@ var Q = require('q'),
 
 // custom modules
 
-var File = require(path.join(__dirname, 'lib', 'file')),
-  Queue = require(path.join(__dirname, 'lib', 'queue')),
-  Worker = require(path.join(__dirname, 'lib', 'worker'));
+var Queue = require(path.join(__dirname, 'lib', 'queue')),
+  Worker = require(path.join(__dirname, 'lib', 'worker')),
+  cdnSync = require(path.join(__dirname, 'lib', 'cdn-sync'));
 
 // promise-bound anti-callbacks
-
-var readdir = Q.nbind(fs.readdir, fs),
-  stat = Q.nbind(fs.stat, fs);
 
 // this module
 
 var config = require(path.join(__dirname, 'lib', 'config')),
   queue = new Queue(),
   workers = [],
-  files = [],
-  cwd = process.cwd(),
-  crd = ''; // current relative directory
+  cwd = process.cwd(); // current relative directory
 
 config.targets.forEach(function (target) {
   target.setQueue(queue);
 });
-
-// http://stackoverflow.com/questions/5827612
-var walkDir = function (dir, done) {
-  var dfrd = Q.defer(),
-    results = [];
-
-  readdir(dir).done(function (list) {
-    var pending = list.length;
-    if (!pending) {
-      return dfrd.resolve(results);
-    }
-    list.forEach(function (file) {
-      file = dir + '/' + file;
-      stat(file).done(function (stat) {
-        if (stat && stat.isDirectory()) {
-          walkDir(file).done(function (res) {
-            results = results.concat(res);
-            pending -= 1;
-            if (!pending) {
-              dfrd.resolve(results);
-            }
-          });
-        } else {
-          pending -= 1;
-          if (path.basename(file)[0] !== '.') {
-            results.push(new File({
-              localPath: file,
-              path: file.replace(config.path + path.sep, ''),
-              size: stat.size
-            }));
-          }
-          if (!pending) {
-            dfrd.resolve(results);
-          }
-        }
-      });
-    });
-  });
-  return dfrd.promise;
-};
 
 // create worker threads
 
@@ -91,7 +45,7 @@ config.targets.forEach(function (target) {
 
 // traverse directory hunting for files
 
-walkDir(cwd)
+cdnSync.FileListing.fromPath(cwd)
   .then(function (files) {
     // wait for files to be hashed and MIME'd
     return Q.all(files.map(function (file) {

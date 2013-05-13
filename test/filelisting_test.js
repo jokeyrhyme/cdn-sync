@@ -67,4 +67,22 @@ suite('FileListing object: factory method "fromPath"', function () {
     });
   });
 
+  test('"ready" signals when all files are ready', function (done) {
+    FileListing.fromPath(__dirname).then(function (files) { // onSuccess
+      files.ready().then(function () {
+        files.forEach(function (file) {
+          assert(file.size, 'file has size set');
+          assert(file.mime, 'file has MIME set');
+          assert(file.path, 'file has absolute path set');
+          assert(file.localPath, 'file has relative path set');
+          assert(file.md5, 'file has MD5 set');
+        });
+        done();
+      }).done();
+    }, function (err) { // onError
+      assert(false, 'fromPath promise rejected');
+      done();
+    });
+  });
+
 });

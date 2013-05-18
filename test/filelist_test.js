@@ -24,20 +24,20 @@ sinon = require('sinon');
 
 // this module
 
-suite('FileListing module', function () {
+suite('FileList module', function () {
 
   test('requires without issue', function () {
-    var FileListing = require('../lib/filelisting');
-    assert(FileListing instanceof Function, 'got FileListing constructor');
+    var FileListing = require('../lib/filelist');
+    assert(FileListing instanceof Function, 'got FileList constructor');
   });
 
 });
 
-suite('FileListing object: constructed with no arguments', function () {
+suite('FileList object: constructed with no arguments', function () {
   var FileListing, files;
 
   suiteSetup(function () {
-    FileListing = require('../lib/filelisting');
+    FileListing = require('../lib/filelist');
   });
 
   test('inherits from Array', function () {
@@ -47,11 +47,11 @@ suite('FileListing object: constructed with no arguments', function () {
 
 });
 
-suite('FileListing object: factory method "fromPath"', function () {
+suite('FileList object: factory method "fromPath"', function () {
   var FileListing, files;
 
   suiteSetup(function () {
-    FileListing = require('../lib/filelisting');
+    FileListing = require('../lib/filelist');
   });
 
   test('factory method "fromPath" finds files', function (done) {

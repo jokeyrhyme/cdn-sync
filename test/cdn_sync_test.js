@@ -35,10 +35,10 @@ suite('main module', function () {
     assert.equal(cdnSync.File, File, 'File available');
   });
 
-  test('exposes FileListing constructor', function () {
+  test('exposes FileList constructor', function () {
     var cdnSync = require('../lib/cdn-sync'),
-      FileListing = require('../lib/filelisting');
+      FileList = require('../lib/filelist');
 
-    assert.equal(cdnSync.FileListing, FileListing, 'FileListing available');
+    assert.equal(cdnSync.FileList, FileList, 'FileList available');
   });
 });

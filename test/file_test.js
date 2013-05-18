@@ -1,9 +1,12 @@
 /*jslint es5:true, indent:2, maxlen:80, node:true*/
 /*global suite:true, test:true, suiteSetup:true, suiteTeardown:true, setup:true,
 teardown:true*/ // Mocha
+/*jslint nomen:true*/ // Underscore.JS and __dirname
 'use strict';
 
 // Node.JS standard modules
+
+var path = require('path');
 
 // 3rd-party modules
 
@@ -169,6 +172,43 @@ suite('File object: clone', function () {
     assert.notEqual(fileA, fileB, 'separate objects');
     fileA.size = 123;
     assert.notEqual(fileA.size, fileB.size, 'size set individually');
+  });
+
+});
+
+suite('File object: this file', function () {
+  var File, file;
+
+  suiteSetup(function () {
+    File = require('../lib/file');
+    file = new File({
+      localPath: __filename,
+      path: path.basename(__filename)
+    });
+  });
+
+  test('ready for use', function (done) {
+    file.promise.then(function (f) {
+      assert(true, 'ready with no failures');
+      assert.equal(file, f, 'returned self when ready');
+      done();
+    }).done();
+  });
+
+  test('path set', function () {
+    assert(file.path, 'path set');
+  });
+
+  test('local path set', function () {
+    assert(file.localPath, 'localPath set');
+  });
+
+  test('MIME set', function () {
+    assert(file.mime, 'MIME set');
+  });
+
+  test('MD5 set', function () {
+    assert(file.md5, 'MD5 set');
   });
 
 });

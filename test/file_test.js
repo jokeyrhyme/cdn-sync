@@ -204,7 +204,7 @@ suite('File object: this file', function () {
   });
 
   test('MIME set', function () {
-    assert(file.mime, 'MIME set');
+    assert.equal(file.mime, 'application/javascript', 'MIME set');
   });
 
   test('MD5 set', function () {

@@ -47,12 +47,6 @@ config.targets.forEach(function (target) {
 
 cdnSync.FileListing.fromPath(cwd)
   .then(function (files) {
-    // wait for files to be hashed and MIME'd
-    return Q.all(files.map(function (file) {
-      return file.promise;
-    }));
-  })
-  .then(function (files) {
     // wait for files to be checked against targets
     var checks = [];
     config.targets.forEach(function (target) {

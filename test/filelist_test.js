@@ -50,38 +50,41 @@ suite('FileList object: constructed with no arguments', function () {
 suite('FileList object: factory method "fromPath"', function () {
   var FileList, files;
 
-  suiteSetup(function () {
+  suiteSetup(function (done) {
     FileList = require('../lib/filelist');
+    FileList.fromPath(__dirname).then(function (f) { // onSuccess
+      files = f;
+      done();
+    }, done);
   });
 
-  test('factory method "fromPath" finds files', function (done) {
-    this.timeout = 10 * 1000;
-    FileList.fromPath(__dirname).then(function (files) { // onSuccess
-      assert(true, 'fromPath promise resolved');
-      assert.lengthOf(files, fs.readdirSync(__dirname).length, 'found files');
-      done();
-    }, function (err) { // onError
-      assert(false, 'fromPath promise rejected');
-      done();
-    });
+  test('factory method "fromPath" finds files', function () {
+    assert.lengthOf(files, fs.readdirSync(__dirname).length, 'found files');
+  });
+
+  test('"indexOf" finds a file known to exist', function () {
+    var index = files.indexOf('filelist_test.js');
+    assert.isNumber(index, 'returns a number');
+    assert(index >= 0, 'index is 0 or greater; file found');
+  });
+
+  test('"indexOf" does not find a non-existent file', function () {
+    var index = files.indexOf('abc123.fake');
+    assert.isNumber(index, 'returns a number');
+    assert.equal(index, -1, 'index is -1; file not found');
   });
 
   test('"ready" signals when all files are ready', function (done) {
-    FileList.fromPath(__dirname).then(function (files) { // onSuccess
-      files.ready().then(function () {
-        files.forEach(function (file) {
-          assert(file.size, 'file has size set');
-          assert(file.mime, 'file has MIME set');
-          assert(file.path, 'file has absolute path set');
-          assert(file.localPath, 'file has relative path set');
-          assert(file.md5, 'file has MD5 set');
-        });
-        done();
-      }).done();
-    }, function (err) { // onError
-      assert(false, 'fromPath promise rejected');
+    files.ready().then(function () {
+      files.forEach(function (file) {
+        assert(file.size, 'file has size set');
+        assert(file.mime, 'file has MIME set');
+        assert(file.path, 'file has absolute path set');
+        assert(file.localPath, 'file has relative path set');
+        assert(file.md5, 'file has MD5 set');
+      });
       done();
-    });
+    }).done();
   });
 
 });

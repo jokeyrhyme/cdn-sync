@@ -27,39 +27,38 @@ sinon = require('sinon');
 suite('FileList module', function () {
 
   test('requires without issue', function () {
-    var FileListing = require('../lib/filelist');
-    assert(FileListing instanceof Function, 'got FileList constructor');
+    var FileList = require('../lib/filelist');
+    assert(FileList instanceof Function, 'got FileList constructor');
   });
 
 });
 
 suite('FileList object: constructed with no arguments', function () {
-  var FileListing, files;
+  var FileList, files;
 
   suiteSetup(function () {
-    FileListing = require('../lib/filelist');
+    FileList = require('../lib/filelist');
   });
 
   test('inherits from Array', function () {
-    files = new FileListing();
+    files = new FileList();
     assert(files instanceof Array, 'new object is an instance of Array');
   });
 
 });
 
 suite('FileList object: factory method "fromPath"', function () {
-  var FileListing, files;
+  var FileList, files;
 
   suiteSetup(function () {
-    FileListing = require('../lib/filelist');
+    FileList = require('../lib/filelist');
   });
 
   test('factory method "fromPath" finds files', function (done) {
     this.timeout = 10 * 1000;
-    FileListing.fromPath(__dirname).then(function (files) { // onSuccess
+    FileList.fromPath(__dirname).then(function (files) { // onSuccess
       assert(true, 'fromPath promise resolved');
-      assert.equal(files.length, fs.readdirSync(__dirname).length,
-        'found test files');
+      assert.lengthOf(files, fs.readdirSync(__dirname).length, 'found files');
       done();
     }, function (err) { // onError
       assert(false, 'fromPath promise rejected');
@@ -68,7 +67,7 @@ suite('FileList object: factory method "fromPath"', function () {
   });
 
   test('"ready" signals when all files are ready', function (done) {
-    FileListing.fromPath(__dirname).then(function (files) { // onSuccess
+    FileList.fromPath(__dirname).then(function (files) { // onSuccess
       files.ready().then(function () {
         files.forEach(function (file) {
           assert(file.size, 'file has size set');

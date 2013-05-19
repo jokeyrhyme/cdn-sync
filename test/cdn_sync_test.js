@@ -24,21 +24,33 @@ sinon = require('sinon');
 suite('main module', function () {
 
   test('requires without issue', function () {
-    var cdnSync = require('../lib/file');
-    assert(cdnSync instanceof Object, 'got Object');
+    var cdnSync = require('../lib/cdn-sync');
+    assert.isObject(cdnSync, 'got Object');
+  });
+
+});
+
+suite('main object', function () {
+  var cdnSync = require('../lib/cdn-sync');
+
+  test('exposes Action constructor', function () {
+    var Action = require('../lib/action');
+    assert.equal(cdnSync.Action, Action, 'Action available');
+  });
+
+  test('exposes ActionList constructor', function () {
+    var ActionList = require('../lib/actionlist');
+    assert.equal(cdnSync.ActionList, ActionList, 'ActionList available');
   });
 
   test('exposes File constructor', function () {
-    var cdnSync = require('../lib/cdn-sync'),
-      File = require('../lib/file');
-
+    var File = require('../lib/file');
     assert.equal(cdnSync.File, File, 'File available');
   });
 
   test('exposes FileList constructor', function () {
-    var cdnSync = require('../lib/cdn-sync'),
-      FileList = require('../lib/filelist');
-
+    var FileList = require('../lib/filelist');
     assert.equal(cdnSync.FileList, FileList, 'FileList available');
   });
+
 });

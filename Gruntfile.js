@@ -28,9 +28,12 @@ module.exports = function (grunt) {
     },
 
     watch: {
-      gruntfile: {
-        files: '<%= config.jslint.files %>',
-        tasks: ['jslint']
+      scripts: {
+        files: '<%= jslint.files %>',
+        tasks: ['test'],
+        options: {
+          interrupt: true
+        }
       }
     }
   });

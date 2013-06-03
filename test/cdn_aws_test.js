@@ -17,7 +17,8 @@ sinon = require('sinon');
 
 // custom modules
 
-var File, FileList;
+var ActionList, File, FileList;
+ActionList = require(path.join(__dirname, '..', 'lib', 'actionlist'));
 File = require(path.join(__dirname, '..', 'lib', 'file'));
 FileList = require(path.join(__dirname, '..', 'lib', 'filelist'));
 
@@ -56,6 +57,11 @@ suite('AWS object: some local, some remote', function () {
         IsTruncated: false,
         Contents: [
           {
+            Key: 'on-both.js',
+            ETag: 'abc123',
+            Size: 123
+          },
+          {
             Key: 'remote-only.js',
             ETag: 'abc123',
             Size: 123
@@ -84,44 +90,7 @@ suite('AWS object: some local, some remote', function () {
         callback(new Error(), {
           Code: 404
         });
-      }
-      if (params.Key === 'remote-only.js') {
-        callback(null, {
-          CacheControl: '',
-          ContentEncoding: null,
-          ContentLength: 123,
-          ContentType: 'application/javascript',
-          ETag: 'abc123',
-          Expiration: '',
-          Expires: new Date(),
-          LastModified: new Date()
-        });
-      }
-      if (params.Key === 'headers-wrong.js') {
-        callback(null, {
-          CacheControl: '',
-          ContentEncoding: null,
-          ContentLength: 123,
-          ContentType: 'application/javascript',
-          ETag: 'abc123',
-          Expiration: '',
-          Expires: new Date(),
-          LastModified: new Date()
-        });
-      }
-      if (params.Key === 'size-wrong.js') {
-        callback(null, {
-          CacheControl: '',
-          ContentEncoding: null,
-          ContentLength: 123,
-          ContentType: 'application/javascript',
-          ETag: 'abc123',
-          Expiration: '',
-          Expires: new Date(),
-          LastModified: new Date()
-        });
-      }
-      if (params.Key === 'hash-wrong.js') {
+      } else {
         callback(null, {
           CacheControl: '',
           ContentEncoding: null,
@@ -136,6 +105,12 @@ suite('AWS object: some local, some remote', function () {
     });
 
     localFiles = new FileList();
+    localFiles.push(new File({
+      path: 'on-both.js',
+      md5: 'abc123',
+      size: 123,
+      mime: 'application/javascript'
+    }));
     localFiles.push(new File({
       path: 'local-only.js',
       md5: 'abc123',
@@ -172,7 +147,7 @@ suite('AWS object: some local, some remote', function () {
   test('cdn.listFiles results in a FileList object', function (done) {
     cdn.listFiles().done(function (files) {
       assert.isArray(files);
-      assert.lengthOf(files, 4);
+      assert.lengthOf(files, 5);
       files.forEach(function (file) {
         assert.instanceOf(file, File);
       });
@@ -194,6 +169,45 @@ suite('AWS object: some local, some remote', function () {
       });
       done();
     });
+  });
+
+  suite('ActionList created with cdn.listFiles', function () {
+    var remoteFiles, actions;
+
+    suiteSetup(function (done) {
+      cdn.listFiles().done(function (files) {
+        remoteFiles = files;
+        done();
+      });
+    });
+
+    test('actionList has 5 Actions', function () {
+      actions = new ActionList();
+      actions.compareFileLists(localFiles, remoteFiles);
+      assert.lengthOf(actions, 5);
+    });
+
+    test('actionList has 3 upload Actions', function () {
+      var uploads = actions.filter(function (action) {
+        return action.doUpload;
+      });
+      assert.lengthOf(uploads, 3);
+    });
+
+    test('actionList has 1 delete Action', function () {
+      var deletes = actions.filter(function (action) {
+        return action.doDelete;
+      });
+      assert.lengthOf(deletes, 1);
+    });
+
+    test('actionList has 1 header Action', function () {
+      var headers = actions.filter(function (action) {
+        return action.doHeaders;
+      });
+      assert.lengthOf(headers, 1);
+    });
+
   });
 
   suiteTeardown(function () {

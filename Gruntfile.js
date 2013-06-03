@@ -16,6 +16,10 @@ module.exports = function (grunt) {
       exclude: [],
       directives: {
         todo: true // TODO: eventually eliminate this exemption
+      },
+      options: {
+        errorsOnly: true,
+        failOnError: true
       }
     },
 

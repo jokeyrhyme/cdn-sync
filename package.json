@@ -33,6 +33,7 @@
     "node": ">=0.9.0 <0.11.0"
   },
   "dependencies": {
+    "async": "~0.2",
     "aws-sdk": "~1.2",
     "colorful": "~2.1",
     "findup-sync": "~0.1",

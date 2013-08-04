@@ -38,8 +38,8 @@
   "dependencies": {
     "async": "~0.2",
     "aws-sdk": "~1.4",
-    "colorful": "~2.1",
     "findup-sync": "~0.1",
+    "glob": "~3.2",
     "mmmagic": "~0.3",
     "q": "~0.9",
     "underscore": "~1.5"

@@ -23,3 +23,5 @@ node_modules
 # JetBrains IDEA files
 /.idea
 /*.iml
+
+/tmp

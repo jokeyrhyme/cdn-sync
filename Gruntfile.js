@@ -7,19 +7,21 @@ module.exports = function (grunt) {
   grunt.initConfig({
 
     jslint: {
-      files: [
-        'Gruntfile.js',
-        'index.js',
-        'lib/**/*.js',
-        'test/**/*.js'
-      ],
-      exclude: [],
-      directives: {
-        todo: true // TODO: eventually eliminate this exemption
-      },
-      options: {
-        errorsOnly: true,
-        failOnError: true
+      all: {
+        src: [
+          'Gruntfile.js',
+          'index.js',
+          'lib/**/*.js',
+          '!test/**/*.js'
+        ],
+        exclude: [],
+        directives: {
+          todo: true // TODO: eventually eliminate this exemption
+        },
+        options: {
+          errorsOnly: true,
+          failOnError: true
+        }
       }
     },
 
@@ -27,6 +29,16 @@ module.exports = function (grunt) {
       options: {
         require: ['chai'],
         ui: 'tdd'
+      },
+      all: ['test/*.js']
+    },
+
+    mochacov: {
+      options: {
+        reporter: 'html-cov',
+        require: ['chai'],
+        ui: 'tdd',
+        output: 'tmp/coverage.html'
       },
       all: ['test/*.js']
     },
@@ -46,8 +58,9 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-jslint');
   grunt.loadNpmTasks('grunt-mocha-cli');
+  grunt.loadNpmTasks('grunt-mocha-cov');
 
-  grunt.registerTask('test', ['jslint', 'mochacli']);
+  grunt.registerTask('test', ['jslint', 'mochacli', 'mochacov']);
 
   // Default task.
   grunt.registerTask('default', ['test']);

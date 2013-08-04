@@ -43,6 +43,11 @@ suite('main object', function () {
     assert.equal(cdnSync.ActionList, ActionList, 'ActionList available');
   });
 
+  test('exposes Config constructor', function () {
+    var Config = require('../lib/config');
+    assert.equal(cdnSync.Config, Config, 'Config available');
+  });
+
   test('exposes File constructor', function () {
     var File = require('../lib/file');
     assert.equal(cdnSync.File, File, 'File available');
@@ -51,6 +56,11 @@ suite('main object', function () {
   test('exposes FileList constructor', function () {
     var FileList = require('../lib/filelist');
     assert.equal(cdnSync.FileList, FileList, 'FileList available');
+  });
+
+  test('exposes Target constructor', function () {
+    var Target = require('../lib/target');
+    assert.equal(cdnSync.Target, Target, 'Target available');
   });
 
 });

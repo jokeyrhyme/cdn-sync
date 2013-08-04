@@ -16,7 +16,9 @@ findup = require('findup-sync');
 
 // custom modules
 
-var cdnSync = require(path.join(__dirname, 'lib'));
+var cdnSync, Config;
+cdnSync = require(path.join(__dirname, 'lib'));
+Config = cdnSync.Config;
 
 // promise-bound anti-callbacks
 
@@ -40,8 +42,14 @@ function init(options) {
 }
 
 function test() {
-  var file = findup('.cdn-sync.json', { nocase: true });
+  var config, file;
+  file = findup('.cdn-sync.json', { nocase: true });
   if (file) {
+    try {
+      config = Config.fromFile(file);
+    } catch (err) {
+      cli.fatal(err);
+    }
     cli.fatal('`test` not implemented yet');
   } else {
     cli.error('.cdn-sync.json not found for ' + process.cwd());
@@ -49,7 +57,6 @@ function test() {
     process.exit(1);
   }
 }
-
 
 cli.parsePackageJson();
 cli.parse(null, {
@@ -59,6 +66,7 @@ cli.parse(null, {
   'go' : 'execute synchronisation (default if no command)'
 });
 
+/*jslint unparam:true*/
 cli.main(function (args, options) {
   switch (cli.command) {
   case 'init':
@@ -72,4 +80,4 @@ cli.main(function (args, options) {
     cli.fatal('not implemented yet');
   }
 });
-
+/*jslint unparam:false*/

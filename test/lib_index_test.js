@@ -24,14 +24,14 @@ sinon = require('sinon');
 suite('main module', function () {
 
   test('requires without issue', function () {
-    var cdnSync = require('../lib/cdn-sync');
+    var cdnSync = require('../lib');
     assert.isObject(cdnSync, 'got Object');
   });
 
 });
 
 suite('main object', function () {
-  var cdnSync = require('../lib/cdn-sync');
+  var cdnSync = require('../lib');
 
   test('exposes Action constructor', function () {
     var Action = require('../lib/action');

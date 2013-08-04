@@ -3,64 +3,73 @@
 'use strict';
 // Node.JS standard modules
 
-var path = require('path');
+var fs, path;
+fs = require('fs');
+path = require('path');
 
 // 3rd-party modules
 
-var Q = require('q'),
-  AWS = require('aws-sdk');
+var Q, cli, findup;
+Q = require('q');
+cli = require('cli');
+findup = require('findup-sync');
 
 // custom modules
 
-var Queue = require(path.join(__dirname, 'lib', 'queue')),
-  Worker = require(path.join(__dirname, 'lib', 'worker')),
-  cdnSync = require(path.join(__dirname, 'lib', 'cdn-sync'));
+var cdnSync = require(path.join(__dirname, 'lib'));
 
 // promise-bound anti-callbacks
 
 // this module
 
-var config = require(path.join(__dirname, 'lib', 'config')),
-  queue = new Queue(),
-  workers = [],
-  cwd = process.cwd(); // current relative directory
+function init(options) {
+  var target = path.join(process.cwd(), '.cdn-sync.json');
+  if (options.force) {
+    cli.fatal('`init` not implemented yet');
+  } else {
+    fs.exists(target, function (exists) {
+      if (exists) {
+        cli.error(target + ' already exists');
+        cli.info('remove existing file or use --force');
+        process.exit(1);
+      } else {
+        cli.fatal('`init` not implemented yet');
+      }
+    });
+  }
+}
 
-config.targets.forEach(function (target) {
-  target.setQueue(queue);
+function test() {
+  var file = findup('.cdn-sync.json', { nocase: true });
+  if (file) {
+    cli.fatal('`test` not implemented yet');
+  } else {
+    cli.error('.cdn-sync.json not found for ' + process.cwd());
+    cli.info('use `cdn-sync init` to get started');
+    process.exit(1);
+  }
+}
+
+
+cli.parsePackageJson();
+cli.parse(null, {
+  '': '',
+  'init' : 'create a .cdn-sync.json file in this directory',
+  'test' : 'health-check on active .cdn-syn.json file',
+  'go' : 'execute synchronisation (default if no command)'
 });
 
-// create worker threads
-
-workers.push(new Worker(queue));
-workers.push(new Worker(queue));
-
-// check target CDNs for files that already exist there
-
-config.targets.forEach(function (target) {
-  target.listFiles().done(function () {
-    target.dfrds.listRemotes.resolve();
-  });
-  target.synchronise();
+cli.main(function (args, options) {
+  switch (cli.command) {
+  case 'init':
+    init(options);
+    break;
+  case 'test':
+    test();
+    break;
+  default: // 'go'
+    test();
+    cli.fatal('not implemented yet');
+  }
 });
 
-// traverse directory hunting for files
-
-cdnSync.FileListing.fromPath(cwd)
-  .then(function (files) {
-    // wait for files to be checked against targets
-    var checks = [];
-    config.targets.forEach(function (target) {
-      files.forEach(function (file) {
-        checks.push(target.checkFile(file.clone()));
-      });
-    });
-    return Q.all(checks);
-  })
-  .done(function () {
-    console.log('DONE!');
-    config.targets.forEach(function (target) {
-      target.dfrds.files.resolve();
-    });
-  });
-
-// TODO: once invalidation lists have been compiled, queue/issue them one by one

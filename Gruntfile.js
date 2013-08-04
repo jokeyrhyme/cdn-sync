@@ -9,10 +9,10 @@ module.exports = function (grunt) {
     jslint: {
       all: {
         src: [
-          'Gruntfile.js',
-          'index.js',
-          'lib/**/*.js',
-          '!test/**/*.js'
+          '**/*.js',
+          '**/*.json',
+          '!test/**/*',
+          '!node_modules/**/*'
         ],
         exclude: [],
         directives: {

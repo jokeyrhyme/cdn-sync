@@ -50,7 +50,11 @@ function test() {
     } catch (err) {
       cli.fatal(err);
     }
-    cli.fatal('`test` not implemented yet');
+    config.testTargets().fail(function () {
+      cli.fatal('configured target fails basic tests');
+    }).done(function () {
+      cli.ok('configured targets pass basic tests');
+    });
   } else {
     cli.error('.cdn-sync.json not found for ' + process.cwd());
     cli.info('use `cdn-sync init` to get started');

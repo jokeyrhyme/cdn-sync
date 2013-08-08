@@ -104,7 +104,9 @@ function go() {
   }).then(function (files) {
     localFiles = files;
     cli.info(localFiles.length + ' file(s) found here');
-    async.eachLimit(config.targets, 1, eachTarget);
+    async.eachLimit(config.targets, 1, eachTarget, function () {
+      cli.ok('all done!');
+    });
   }).done();
 }
 

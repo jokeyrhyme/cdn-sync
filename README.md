@@ -2,7 +2,7 @@
 
 Synchronise a local directory with AWS CloudFront / S3, maintaining correct headers, etc.
 
-**This project is not yet functional.**
+Functionality is sufficient to replace s3cmd with better MIME detection.
 
 ## Goals
 
@@ -96,7 +96,28 @@ _(Coming soon)_
 _(Coming soon)_
 
 ## Examples
-_(Coming soon)_
+
+### Example .cdn-sync.json
+
+```
+{
+  "targets": [
+    {
+      "type": "aws",
+      "options": {
+        "accessKeyId": "...",
+        "secretAccessKey": "...",
+        "region": "...",
+        "sslEnabled": true,
+        "Bucket": "..."
+      },
+      "strategy": ["clone"]
+    }
+  ]
+}
+```
+
+Note: for targets[index].options, use the options you would pass to the [AWS.S3 constructor](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3_20060301.html#constructor-property).
 
 ## Contributing
 Formal styleguide for this project is JSLint. See JSLint settings at the top of

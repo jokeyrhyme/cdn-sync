@@ -1,7 +1,7 @@
 {
   "name": "cdn-sync",
-  "description": "deflate / synchronous assets to a CDN",
-  "version": "0.0.1",
+  "description": "deflate / synchronise assets to a CDN",
+  "version": "0.1.0",
   "homepage": "https://github.com/jokeyrhyme/cdn-sync",
   "author": {
     "name": "Ron Waldon",

@@ -7,7 +7,9 @@
 
 // Node.JS standard modules
 
-var fs = require('fs');
+var fs, path;
+fs = require('fs');
+path = require('path');
 
 // 3rd-party modules
 
@@ -83,6 +85,47 @@ suite('FileList object: factory method "fromPath"', function () {
         assert(file.localPath, 'file has relative path set');
         assert(file.md5, 'file has MD5 set');
       });
+      done();
+    }).done();
+  });
+
+});
+
+suite('FileList object: "fromPath" with sub-directories', function () {
+  var FileList, files;
+
+  suiteSetup(function () {
+    FileList = require('../lib/filelist');
+  });
+
+  test('factory method "fromPath" completes eventually', function (done) {
+    FileList.fromPath(path.join(__dirname, '..', 'lib')).then(function (f) {
+      // onSuccess
+      files = f;
+      assert(true, 'calls success handler');
+      done();
+    }, function (err) {
+      // onError
+      assert.fail(true, false, 'does not call error handler');
+      done();
+    });
+  });
+
+  test('factory method "fromPath" skips directories', function () {
+    var hasDirectories = files.some(function (file) {
+      return file.path[file.path.length - 1] === '/';
+    });
+    assert(!hasDirectories, 'no directories included in results');
+  });
+
+  test('"ready" signals eventually', function (done) {
+    files.ready().then(function () {
+      // onSuccess
+      assert(true, 'calls success handler');
+      done();
+    }, function (err) {
+      // onError
+      assert.fail(true, false, 'does not call error handler');
       done();
     }).done();
   });

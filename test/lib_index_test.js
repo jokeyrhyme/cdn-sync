@@ -58,6 +58,11 @@ suite('main object', function () {
     assert.equal(cdnSync.FileList, FileList, 'FileList available');
   });
 
+  test('exposes GzippedFile constructor', function () {
+    var GzippedFile = require('../lib/gzippedfile');
+    assert.equal(cdnSync.GzippedFile, GzippedFile, 'GzippedFile available');
+  });
+
   test('exposes Target constructor', function () {
     var Target = require('../lib/target');
     assert.equal(cdnSync.Target, Target, 'Target available');

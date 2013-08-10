@@ -6,7 +6,9 @@ teardown:true*/ // Mocha
 
 // Node.JS standard modules
 
-var path = require('path');
+var fs, path;
+fs = require('fs');
+path = require('path');
 
 // 3rd-party modules
 
@@ -93,7 +95,8 @@ suite('File object: constructed with local path and MIME', function () {
     file = new File({
       localPath: 'fake/path/to/file.json',
       mime: 'application/json',
-      md5: '649530ee65cbb20c69be85ff7582fd88'
+      md5: '649530ee65cbb20c69be85ff7582fd88',
+      size: 123
     });
     md5Spy = sinon.spy(file, 'calculateMD5');
     mimeSpy = sinon.spy(file, 'detectMIME');
@@ -147,7 +150,8 @@ suite('File object: clone', function () {
     fileA = new File({
       localPath: 'fake/path/to/file.json',
       mime: 'application/json',
-      md5: '649530ee65cbb20c69be85ff7582fd88'
+      md5: '649530ee65cbb20c69be85ff7582fd88',
+      size: 123
     });
   });
 
@@ -170,8 +174,6 @@ suite('File object: clone', function () {
 
   test('not the same object', function () {
     assert.notEqual(fileA, fileB, 'separate objects');
-    fileA.size = 123;
-    assert.notEqual(fileA.size, fileB.size, 'size set individually');
   });
 
 });
@@ -209,6 +211,16 @@ suite('File object: this file', function () {
 
   test('MD5 set', function () {
     assert(file.md5, 'MD5 set');
+  });
+
+  test('size set', function (done) {
+    assert.isNumber(file.size, 'size set');
+    assert(file.size > 0, 'size > 0');
+    fs.stat(file.localPath, function (err, stat) {
+      assert(!err, 'no error stat\'ing this file');
+      assert.equal(file.size, stat.size, 'size is correct');
+      done();
+    });
   });
 
 });

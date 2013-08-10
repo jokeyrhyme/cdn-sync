@@ -131,3 +131,29 @@ suite('FileList object: "fromPath" with sub-directories', function () {
   });
 
 });
+
+suite('FileList object: "applyStrategy" for "gzip"', function () {
+  var FileList, files;
+
+  suiteSetup(function (done) {
+    FileList = require('../lib/filelist');
+    FileList.fromPath(__dirname).then(function (f) { // onSuccess
+      files = f;
+      done();
+    }, done);
+  });
+
+  test('strategy "gzip" completes eventually', function (done) {
+    files.applyStrategy(['clone', 'gzip']).then(function (f) {
+      // onSuccess
+      files = f;
+      assert(true, 'calls success handler');
+      done();
+    }, function (err) {
+      // onError
+      assert.fail(true, false, 'does not call error handler');
+      done();
+    });
+  });
+
+});

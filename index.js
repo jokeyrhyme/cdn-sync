@@ -71,7 +71,7 @@ function test() {
 }
 
 function eachTarget(t, done) {
-  var remoteFiles, actions, info;
+  var actions, info;
   info = function (msg) {
     cli.info(t.label + ': ' + msg);
   };
@@ -79,8 +79,10 @@ function eachTarget(t, done) {
     cli.progress(progress, total);
   });
 
-  t.cdn.listFiles().then(function (files) {
-    remoteFiles = files;
+  Q.all([
+    localFiles.applyStrategy(t.strategy),
+    t.cdn.listFiles()
+  ]).spread(function (localFiles, remoteFiles) {
     info(remoteFiles.length + ' remote file(s)');
     actions = new ActionList();
     actions.compareFileLists(localFiles, remoteFiles);

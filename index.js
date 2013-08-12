@@ -46,7 +46,7 @@ function init(options) {
   }
 }
 
-function test() {
+function testConfig() {
   var config, dfrd, file;
   dfrd = Q.defer();
   file = findup('.cdn-sync.json', { nocase: true });
@@ -70,13 +70,13 @@ function test() {
   return dfrd.promise;
 }
 
-function eachTarget(t, done) {
+function eachTarget(t, options, done) {
   var actions, info;
   info = function (msg) {
     cli.info(t.label + ': ' + msg);
   };
-  t.on('progress', function (progress, total) {
-    cli.progress(progress, total);
+  t.on('progress', function (action) {
+    cli.info(action.toString());
   });
 
   Q.all([
@@ -87,7 +87,7 @@ function eachTarget(t, done) {
     actions = new ActionList();
     actions.compareFileLists(localFiles, remoteFiles);
     info(actions.length + ' synchronisation action(s) to perform');
-    return t.cdn.executeActions(actions);
+    return t.cdn.executeActions(actions, options);
 
   }).then(function () {
     done();
@@ -97,23 +97,27 @@ function eachTarget(t, done) {
   }).done();
 }
 
-function go() {
+function go(options) {
   var config;
-  test().then(function (cfg) {
+  testConfig().then(function (cfg) {
     config = cfg;
     cli.info('content root: ' + config.cwd);
     return FileList.fromPath(config.cwd);
   }).then(function (files) {
     localFiles = files;
     cli.info(localFiles.length + ' file(s) found here');
-    async.eachLimit(config.targets, 1, eachTarget, function () {
+    async.eachLimit(config.targets, 1, function (t, done) {
+      eachTarget(t, options, done);
+    }, function () {
       cli.ok('all done!');
     });
   }).done();
 }
 
 cli.parsePackageJson();
-cli.parse(null, {
+cli.parse({
+  'dry-run': ['n', 'make no changes, only simulate actions']
+}, {
   'init' : 'create a .cdn-sync.json file in this directory',
   'test' : 'health-check on active .cdn-syn.json file',
   'go' : 'execute synchronisation (default if no command)'
@@ -126,10 +130,10 @@ cli.main(function (args, options) {
     init(options);
     break;
   case 'test':
-    test();
+    testConfig();
     break;
   default: // 'go'
-    go();
+    go(options);
   }
 });
 /*jslint unparam:false*/

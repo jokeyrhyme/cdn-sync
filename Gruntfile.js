@@ -60,7 +60,11 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('grunt-mocha-cov');
 
-  grunt.registerTask('test', ['jslint', 'mochacli', 'mochacov']);
+  if (process.env.CI && process.env.TRAVIS) {
+    grunt.registerTask('test', ['jslint', 'mochacli']);
+  } else {
+    grunt.registerTask('test', ['jslint', 'mochacli', 'mochacov']);
+  }
 
   // Default task.
   grunt.registerTask('default', ['test']);

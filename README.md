@@ -1,4 +1,6 @@
-# cdn-sync [![Build Status](https://travis-ci.org/jokeyrhyme/cdn-sync.png?branch=master,develop)](https://travis-ci.org/jokeyrhyme/cdn-sync)
+# cdn-sync
+[![Build Status](https://travis-ci.org/jokeyrhyme/cdn-sync.png?branch=master,develop)](https://travis-ci.org/jokeyrhyme/cdn-sync)
+[![NPM version](https://badge.fury.io/js/cdn-sync.png)](http://badge.fury.io/js/cdn-sync)
 
 Synchronise a local directory with AWS CloudFront / S3, maintaining correct headers, etc.
 

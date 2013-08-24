@@ -45,7 +45,10 @@ module.exports = function (grunt) {
 
     watch: {
       scripts: {
-        files: '<%= jslint.all.src %>',
+        files: [
+          '<%= jslint.all.src %>',
+          'test/**/*'
+        ],
         tasks: ['test'],
         options: {
           interrupt: true

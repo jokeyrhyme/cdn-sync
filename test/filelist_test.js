@@ -132,19 +132,21 @@ suite('FileList object: "fromPath" with sub-directories', function () {
 
 });
 
-suite('FileList object: "applyStrategy" for "gzip"', function () {
-  var FileList, files;
+suite('fileList.applyStrategy "gzip"', function () {
+  var FileList, files, originalLength;
 
   suiteSetup(function (done) {
     FileList = require('../lib/filelist');
-    FileList.fromPath(__dirname).then(function (f) { // onSuccess
+    FileList.fromPath(path.join(__dirname, '..', 'doc')).then(function (f) {
+      // onSuccess
       files = f;
+      originalLength = files.length;
       done();
     }, done);
   });
 
   test('strategy "gzip" completes eventually', function (done) {
-    files.applyStrategy(['clone', 'gzip']).then(function (f) {
+    files.applyStrategy(['gzip']).then(function (f) {
       // onSuccess
       files = f;
       assert(true, 'calls success handler');
@@ -154,6 +156,142 @@ suite('FileList object: "applyStrategy" for "gzip"', function () {
       assert.fail(true, false, 'does not call error handler');
       done();
     });
+  });
+
+  test('same number of files', function () {
+    assert.lengthOf(files, originalLength, files.length + ' file(s)');
+  });
+
+});
+
+suite('fileList.applyStrategy "clone"', function () {
+  var FileList, files, originalLength;
+
+  suiteSetup(function (done) {
+    FileList = require('../lib/filelist');
+    FileList.fromPath(path.join(__dirname, '..', 'doc')).then(function (f) {
+      // onSuccess
+      files = f;
+      originalLength = files.length;
+      done();
+    }, done);
+  });
+
+  test('strategy "gzip" completes eventually', function (done) {
+    files.applyStrategy(['clone']).then(function (f) {
+      // onSuccess
+      files = f;
+      assert(true, 'calls success handler');
+      done();
+    }, function (err) {
+      // onError
+      assert.fail(true, false, 'does not call error handler');
+      done();
+    });
+  });
+
+  test('same number of files', function () {
+    assert.lengthOf(files, originalLength, files.length + ' file(s)');
+  });
+
+});
+
+suite('fileList.applyStrategy "gzip-suffix"', function () {
+  var FileList, files, originalLength;
+
+  suiteSetup(function (done) {
+    FileList = require('../lib/filelist');
+    FileList.fromPath(path.join(__dirname, '..', 'doc')).then(function (f) {
+      // onSuccess
+      files = f;
+      originalLength = files.length;
+      done();
+    }, done);
+  });
+
+  test('strategy "gzip-suffix" completes eventually', function (done) {
+    files.applyStrategy(['gzip-suffix']).then(function (f) {
+      // onSuccess
+      files = f;
+      assert(true, 'calls success handler');
+      done();
+    }, function (err) {
+      // onError
+      assert.fail(true, false, 'does not call error handler');
+      done();
+    });
+  });
+
+  test('same number of files', function () {
+    assert.lengthOf(files, originalLength, files.length + ' file(s)');
+  });
+
+  test('all files end in .gz', function () {
+    assert.isFalse(files.some(function (file) {
+      return file.path.indexOf('.gz') !== -1;
+    }), 'no non-.gz files found');
+  });
+
+});
+
+suite('fileList.applyStrategy ["clone", "gzip-suffix"]', function () {
+  var FileList, files, originalFiles, originalLength;
+
+  suiteSetup(function (done) {
+    FileList = require('../lib/filelist');
+    FileList.fromPath(path.join(__dirname, '..', 'doc')).then(function (f) {
+      // onSuccess
+      originalFiles = f;
+      originalLength = f.length;
+      done();
+    }, done);
+  });
+
+  test('strategy ["clone", "gzip-suffix"] completes', function (done) {
+    originalFiles.applyStrategy(['clone', 'gzip-suffix']).then(function (f) {
+      // onSuccess
+      files = f;
+      assert(true, 'calls success handler');
+      done();
+    }, function (err) {
+      // onError
+      assert.fail(true, false, 'does not call error handler');
+      done();
+    });
+  });
+
+  test('doubles the number of files', function () {
+    assert.equal(files.length, originalLength * 2, files.length + ' file(s)');
+  });
+
+  suite('compare strategyFiles against originalFiles', function () {
+    var ActionList, actions;
+
+    suiteSetup(function () {
+      ActionList = require('../lib/actionlist');
+      actions = new ActionList();
+      actions.compareFileLists(files, originalFiles);
+//      console.log(actions);
+    });
+
+    test('only actions should be to upload the .gz files', function () {
+      assert.lengthOf(actions, files.length / 2, 'actions for half the files');
+    });
+
+    test('only upload actions', function () {
+      var hasDeletes, hasHeaders;
+
+      hasDeletes = actions.some(function (action) {
+        return action.doDelete;
+      });
+      assert.isFalse(hasDeletes, 'no delete actions');
+
+      hasHeaders = actions.some(function (action) {
+        return action.doHeaders;
+      });
+      assert.isFalse(hasHeaders, 'no headers actions');
+    });
+
   });
 
 });

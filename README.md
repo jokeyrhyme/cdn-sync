@@ -70,7 +70,7 @@ _(Coming soon)_
 Note: for targets[index].options, use the options you would pass to the [AWS.S3 constructor](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3_20060301.html#constructor-property).
 
 ## Contributing
-Formal styleguide for this project is JSLint. See JSLint settings at the top of
+Formal style-guide for this project is JSLint. See JSLint settings at the top of
 each file.
 
 Add unit tests for any new or changed functionality. Lint and test your code

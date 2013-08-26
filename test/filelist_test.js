@@ -228,14 +228,15 @@ suite('fileList.applyStrategy "gzip-suffix"', function () {
 
   test('all files end in .gz', function () {
     assert.isFalse(files.some(function (file) {
-      return file.path.indexOf('.gz') !== -1;
+      return file.path.indexOf('.gz') === -1;
     }), 'no non-.gz files found');
   });
 
 });
 
 suite('fileList.applyStrategy ["clone", "gzip-suffix"]', function () {
-  var FileList, files, originalFiles, originalLength;
+  var FileList, files, originalFiles, originalLength, filename;
+  filename = 'deployment.md';
 
   suiteSetup(function (done) {
     FileList = require('../lib/filelist');
@@ -245,6 +246,10 @@ suite('fileList.applyStrategy ["clone", "gzip-suffix"]', function () {
       originalLength = f.length;
       done();
     }, done);
+  });
+
+  test('files contains ' + filename, function () {
+    assert(originalFiles.indexOf(filename) !== -1, 'known file included');
   });
 
   test('strategy ["clone", "gzip-suffix"] completes', function (done) {
@@ -264,14 +269,13 @@ suite('fileList.applyStrategy ["clone", "gzip-suffix"]', function () {
     assert.equal(files.length, originalLength * 2, files.length + ' file(s)');
   });
 
-  suite('compare strategyFiles against originalFiles', function () {
+  suite('compare files against originalFiles', function () {
     var ActionList, actions;
 
     suiteSetup(function () {
       ActionList = require('../lib/actionlist');
       actions = new ActionList();
       actions.compareFileLists(files, originalFiles);
-//      console.log(actions);
     });
 
     test('only actions should be to upload the .gz files', function () {

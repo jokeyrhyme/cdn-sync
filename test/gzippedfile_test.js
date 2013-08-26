@@ -56,6 +56,7 @@ suite('GzippedFile object: this file', function () {
   test('ready for use', function (done) {
     gzip.promise.then(function (g) {
       assert(true, 'ready with no failures');
+      assert.isTrue(gzip.file.promise.isFulfilled(), 'real file ready!');
       assert.equal(gzip, g, 'returned self when ready');
       done();
     }).done();

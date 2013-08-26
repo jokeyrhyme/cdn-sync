@@ -13,12 +13,13 @@ path = require('path');
 
 // 3rd-party modules
 
-var chai, assert, sinon;
+var chai, assert, sinon, Q;
 
 chai = require('chai');
 chai.use(require('sinon-chai'));
 assert = require('chai').assert;
 sinon = require('sinon');
+Q = require('q');
 
 // custom modules
 
@@ -248,7 +249,7 @@ suite('fileList.applyStrategy ["clone", "gzip-suffix"]', function () {
     }, done);
   });
 
-  test('files contains ' + filename, function () {
+  test('originalFiles contains ' + filename, function () {
     assert(originalFiles.indexOf(filename) !== -1, 'known file included');
   });
 
@@ -263,6 +264,41 @@ suite('fileList.applyStrategy ["clone", "gzip-suffix"]', function () {
       assert.fail(true, false, 'does not call error handler');
       done();
     });
+  });
+
+  test('files.ready', function () {
+    var promise;
+    assert.isFunction(files.ready, 'files.ready is a function');
+    promise = files.ready();
+    assert.isTrue(Q.isPromise(promise), 'files.ready returns a promise');
+  });
+
+  test('files.constructor', function () {
+    assert.isFunction(files.constructor, 'files.constructor is a function');
+    assert.equal(files.constructor, FileList, 'constructor function');
+  });
+
+  test('files.indexOf', function () {
+    assert.isFunction(files.indexOf, 'files.indexOf is a function');
+    assert.equal(files.indexOf, FileList.prototype.indexOf, 'prototyped');
+  });
+
+  test('originalFiles still contains ' + filename, function () {
+    assert(originalFiles.indexOf(filename) !== -1, 'known file included');
+  });
+
+  test('files contains ' + filename, function () {
+    assert(files.some(function (f) {
+      return f.path === filename;
+    }), 'known file included');
+    assert(files.indexOf(filename) !== -1, 'known file index found');
+  });
+
+  test('files contains ' + filename + '.gz', function () {
+    assert(files.some(function (f) {
+      return f.path === (filename + '.gz');
+    }), 'known file included');
+    assert(files.indexOf(filename + '.gz') !== -1, 'known file index found');
   });
 
   test('doubles the number of files', function () {

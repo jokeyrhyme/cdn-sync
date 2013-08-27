@@ -1,4 +1,4 @@
-/*jslint es5:true, indent:2, maxlen:80, node:true*/
+/*jslint es5:true, indent:2, maxlen:80, node:true, nomen:true*/
 /*global suite, test, suiteSetup, suiteTeardown, setup, teardown*/ // Mocha
 'use strict';
 
@@ -84,4 +84,41 @@ suite('JSON schema for `.cdn-sync.json`', function () {
     report = validator.validateWithCompiled(broken, compiledSchema);
     assert.isFalse(report.valid, "not valid");
   });
+});
+
+suite('Config.validate', function () {
+
+  var Config;
+
+  suiteSetup(function () {
+    Config = require(path.join(__dirname, '..', 'lib', 'config'));
+  });
+
+  test('Config.validate(example)', function (done) {
+    Config.validate(example).then(function () {
+      // onResolve
+      assert(true, 'example passes validation');
+      done();
+    }, function (err) {
+      // onReject
+      assert(false, err);
+      done();
+    });
+  });
+
+  test('Config.validate(broken)', function (done) {
+    var broken;
+    broken = JSON.parse(JSON.stringify(example));
+    delete broken.targets[0].options.region;
+    Config.validate(broken).then(function () {
+      // onResolve
+      assert(false, 'broken passed validation');
+      done();
+    }, function () {
+      // onReject
+      assert(true, 'broken failed validation');
+      done();
+    });
+  });
+
 });

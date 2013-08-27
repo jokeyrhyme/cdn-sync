@@ -43,7 +43,8 @@
     "glob": "~3.2",
     "mmmagic": "~0.3",
     "q": "~0.9",
-    "underscore": "~1.5"
+    "underscore": "~1.5",
+    "z-schema": "~1.5"
   },
   "devDependencies": {
     "chai": "~1.7",

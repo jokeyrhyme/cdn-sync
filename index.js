@@ -56,6 +56,9 @@ function testConfig() {
     } catch (err) {
       cli.fatal(err);
     }
+    config.validate().fail(function (err) {
+      cli.fatal(err);
+    });
     config.testTargets().fail(function () {
       cli.fatal('configured target fails basic tests');
     }).done(function () {

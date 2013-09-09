@@ -34,11 +34,22 @@ module.exports = function (grunt) {
     },
 
     mochacov: {
+      html: {
+        options: {
+          reporter: 'html-cov',
+          output: 'tmp/coverage.html'
+        }
+      },
+      coveralls: {
+        options: {
+          coveralls: {
+            serviceName: 'travis-ci'
+          }
+        }
+      },
       options: {
-        reporter: 'html-cov',
         require: ['chai'],
-        ui: 'tdd',
-        output: 'tmp/coverage.html'
+        ui: 'tdd'
       },
       all: ['test/*.js']
     },
@@ -63,11 +74,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('grunt-mocha-cov');
 
-  if (process.env.CI && process.env.TRAVIS) {
-    grunt.registerTask('test', ['jslint', 'mochacli']);
-  } else {
-    grunt.registerTask('test', ['jslint', 'mochacli', 'mochacov']);
-  }
+  grunt.registerTask('travis', ['jslint', 'mochacli', 'mochacov:coveralls']);
+  grunt.registerTask('test', ['jslint', 'mochacli', 'mochacov:html']);
 
   // Default task.
   grunt.registerTask('default', ['test']);

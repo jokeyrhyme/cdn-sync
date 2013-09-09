@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "async": "~0.2",
-    "aws-sdk": "~1.4",
+    "aws-sdk": "~1.5",
     "cli": "~0.4",
     "findup-sync": "~0.1",
     "glob": "~3.2",
@@ -51,7 +51,7 @@
     "grunt": "~0.4",
     "grunt-contrib-watch": "~0.5",
     "grunt-jslint": "~1.0",
-    "grunt-mocha-cli": "~1.0",
+    "grunt-mocha-cli": "~1.1",
     "grunt-mocha-cov": "~0.0.7",
     "mocha": "~1.12",
     "sinon": "~1.7",

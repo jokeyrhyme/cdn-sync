@@ -51,12 +51,10 @@ suite('JSON schema for `.cdn-sync.json`', function () {
   });
 
   test('schema passes validation', function (done) {
-    validator.validateSchema(schema, function (err, valid) {
-      if (valid) {
-        assert.isTrue(valid);
-      } else {
-        console.log(err);
-      }
+    validator.validateSchema(schema, function (err, report) {
+      assert.isNull(err);
+      assert.isObject(report);
+      assert.lengthOf(report.errors, 0);
       done();
     });
   });
@@ -64,25 +62,28 @@ suite('JSON schema for `.cdn-sync.json`', function () {
   test('schema compiles', function (done) {
     validator.compileSchema(schema, function (err, compiled) {
       assert(true, 'asynchronous callback is executed');
-      assert.isUndefined(err, 'no compilation errors');
+      assert.isNull(err, 'no compilation errors');
       assert(compiled);
       compiledSchema = compiled;
       done();
     });
   });
 
-  test('example validates against compiled schema', function () {
-    var report;
-    report = validator.validateWithCompiled(example, compiledSchema);
-    assert.isTrue(report.valid, JSON.stringify(report.errors));
+  test('example validates against compiled schema', function (done) {
+    validator.validate(example, compiledSchema, function (report) {
+      assert.isNull(report);
+      done();
+    });
   });
 
-  test('example without region does not validate', function () {
-    var broken, report;
+  test('example without region does not validate', function (done) {
+    var broken;
     broken = JSON.parse(JSON.stringify(example));
     delete broken.targets[0].options.region;
-    report = validator.validateWithCompiled(broken, compiledSchema);
-    assert.isFalse(report.valid, "not valid");
+    validator.validate(broken, compiledSchema, function (err, report) {
+      assert.isObject(err);
+      done();
+    });
   });
 });
 

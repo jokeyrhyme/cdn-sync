@@ -37,14 +37,14 @@
   },
   "dependencies": {
     "async": "~0.2",
-    "aws-sdk": "~1.5",
+    "aws-sdk": "~1.12",
     "cli": "~0.4",
     "findup-sync": "~0.1",
     "glob": "~3.2",
     "mmmagic": "~0.3",
     "q": "~0.9",
     "underscore": "~1.5",
-    "z-schema": "~1.5"
+    "z-schema": "~2.0"
   },
   "devDependencies": {
     "chai": "~1.8",

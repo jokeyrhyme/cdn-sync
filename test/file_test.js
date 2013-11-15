@@ -1,4 +1,4 @@
-/*jslint es5:true, indent:2, maxlen:80, node:true*/
+/*jslint indent:2, maxlen:80, node:true*/
 /*global suite:true, test:true, suiteSetup:true, suiteTeardown:true, setup:true,
 teardown:true*/ // Mocha
 /*jslint nomen:true*/ // Underscore.JS and __dirname

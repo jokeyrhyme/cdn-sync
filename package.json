@@ -42,6 +42,7 @@
     "findup-sync": "~0.1",
     "glob": "~3.2",
     "graceful-fs": "~2.0",
+    "mime": "~1.2",
     "mmmagic": "~0.3",
     "q": "~0.9",
     "underscore": "~1.5",

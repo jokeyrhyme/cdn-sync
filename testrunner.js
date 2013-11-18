@@ -1,4 +1,4 @@
-/*jslint es5:true, indent:2, maxlen:80, node:true, nomen:true*/
+/*jslint indent:2, maxlen:80, node:true, nomen:true*/
 'use strict';
 
 // Node.JS standard modules

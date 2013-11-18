@@ -1,4 +1,4 @@
-/*jslint es5:true, indent:2, maxlen:80, node:true*/
+/*jslint indent:2, maxlen:80, node:true*/
 /*global suite:true, test:true, suiteSetup:true, suiteTeardown:true, setup:true,
 teardown:true*/ // Mocha
 /*jslint nomen:true*/ // Underscore.JS and __dirname
@@ -221,6 +221,75 @@ suite('File object: this file', function () {
       assert.equal(file.size, stat.size, 'size is correct');
       done();
     });
+  });
+
+});
+
+suite('File#setMIME()', function () {
+  var File;
+
+  suiteSetup(function () {
+    File = require(path.join('..', 'lib', 'file'));
+  });
+
+  test('LICENSE: text/plain', function () {
+    var file;
+    file = new File({
+      path: 'LICENSE'
+    });
+    file.setMIME('text/plain');
+    assert.equal(file.mime, 'text/plain');
+    assert.equal(file.headers['Content-Type'], 'text/plain');
+  });
+
+  test('LICENSE: application/octet-stream', function () {
+    var file;
+    file = new File({
+      path: 'LICENSE'
+    });
+    file.setMIME('application/octet-stream');
+    assert.equal(file.mime, 'text/plain');
+    assert.equal(file.headers['Content-Type'], 'text/plain');
+  });
+
+  test('LICENSE.gz: text/plain', function () {
+    var file;
+    file = new File({
+      path: 'LICENSE.gz'
+    });
+    file.setMIME('text/plain');
+    assert.equal(file.mime, 'text/plain');
+    assert.equal(file.headers['Content-Type'], 'text/plain');
+  });
+
+  test('LICENSE.gz: application/octet-stream', function () {
+    var file;
+    file = new File({
+      path: 'LICENSE.gz'
+    });
+    file.setMIME('application/octet-stream');
+    assert.equal(file.mime, 'text/plain');
+    assert.equal(file.headers['Content-Type'], 'text/plain');
+  });
+
+  test('LICENSE.txt: text/plain', function () {
+    var file;
+    file = new File({
+      path: 'LICENSE.txt'
+    });
+    file.setMIME('text/plain');
+    assert.equal(file.mime, 'text/plain');
+    assert.equal(file.headers['Content-Type'], 'text/plain');
+  });
+
+  test('LICENSE.txt.gz: text/plain', function () {
+    var file;
+    file = new File({
+      path: 'LICENSE.txt.gz'
+    });
+    file.setMIME('text/plain');
+    assert.equal(file.mime, 'text/plain');
+    assert.equal(file.headers['Content-Type'], 'text/plain');
   });
 
 });

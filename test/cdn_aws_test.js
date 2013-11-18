@@ -1,4 +1,4 @@
-/*jslint es5:true, indent:2, maxlen:80, node:true, nomen:true*/
+/*jslint indent:2, maxlen:80, node:true, nomen:true*/
 /*global suite, test, suiteSetup, suiteTeardown, setup, teardown*/ // Mocha
 'use strict';
 

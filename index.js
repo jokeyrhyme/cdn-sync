@@ -1,4 +1,4 @@
-/*jslint es5:true, indent:2, maxlen:80, node:true*/
+/*jslint indent:2, maxlen:80, node:true*/
 /*jslint nomen:true*/ // Underscore.JS and __dirname
 'use strict';
 // Node.JS standard modules
@@ -56,6 +56,9 @@ function testConfig() {
     } catch (err) {
       cli.fatal(err);
     }
+    config.validate().fail(function (err) {
+      cli.fatal(err);
+    });
     config.testTargets().fail(function () {
       cli.fatal('configured target fails basic tests');
     }).done(function () {

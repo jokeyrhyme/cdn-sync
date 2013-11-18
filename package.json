@@ -1,7 +1,7 @@
 {
   "name": "cdn-sync",
   "description": "deflate / synchronise assets to a CDN",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "homepage": "https://github.com/jokeyrhyme/cdn-sync",
   "author": {
     "name": "Ron Waldon",
@@ -37,22 +37,25 @@
   },
   "dependencies": {
     "async": "~0.2",
-    "aws-sdk": "~1.4",
+    "aws-sdk": "~1.12",
     "cli": "~0.4",
     "findup-sync": "~0.1",
     "glob": "~3.2",
+    "graceful-fs": "~2.0",
+    "mime": "~1.2",
     "mmmagic": "~0.3",
     "q": "~0.9",
-    "underscore": "~1.5"
+    "underscore": "~1.5",
+    "z-schema": "~2.0"
   },
   "devDependencies": {
-    "chai": "~1.7",
+    "chai": "~1.8",
     "grunt": "~0.4",
     "grunt-contrib-watch": "~0.5",
-    "grunt-jslint": "~1.0",
-    "grunt-mocha-cli": "~1.0",
+    "grunt-jslint": "~1.1",
+    "grunt-mocha-cli": "~1.3",
     "grunt-mocha-cov": "~0.0.7",
-    "mocha": "~1.12",
+    "mocha": "~1.14",
     "sinon": "~1.7",
     "sinon-chai": "~2.4"
   },

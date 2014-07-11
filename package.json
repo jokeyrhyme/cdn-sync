@@ -44,6 +44,7 @@
     "graceful-fs": "3.0.2",
     "mime": "1.2.11",
     "mmmagic": "0.3.8",
+    "progress": "~1.1.7",
     "q": "0.9.7",
     "underscore": "1.6.0",
     "z-schema": "2.4.8"

@@ -86,16 +86,17 @@ function eachTarget(t, options, done) {
   cli.info('applying "' + t.strategy + '" strategy to local file(s)');
   localFiles.applyStrategy(t.strategy).then(function (files) {
     theseLocalFiles = files;
-    cli.info('scanning ' + t.label + '...');
+    info('scanning...');
     t.cdn.once('files.length', function (length) {
-      bar = new ProgressBar('[:bar] :current/:total :percent :elapsed :etas', { total: length });
+      bar = new ProgressBar('[:bar] :current/:total :percent :elapsed :etas', {
+        total: length
+      });
     });
     t.cdn.on('file:fixed', function () {
       bar.tick();
     });
     return t.cdn.listFiles();
   }).then(function (remoteFiles) {
-    info(remoteFiles.length + ' remote file(s)');
     actions = new ActionList();
     actions.compareFileLists(theseLocalFiles, remoteFiles);
     info(actions.length + ' synchronisation action(s) to perform');

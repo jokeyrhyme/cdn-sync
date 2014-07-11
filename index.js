@@ -9,11 +9,12 @@ path = require('path');
 
 // 3rd-party modules
 
-var Q, async, cli, findup;
+var Q, async, cli, findup, ProgressBar;
 Q = require('q');
 async = require('async');
 cli = require('cli');
 findup = require('findup-sync');
+ProgressBar = require('progress');
 
 // custom modules
 
@@ -74,7 +75,7 @@ function testConfig() {
 }
 
 function eachTarget(t, options, done) {
-  var actions, info;
+  var actions, info, theseLocalFiles, bar;
   info = function (msg) {
     cli.info(t.label + ': ' + msg);
   };
@@ -82,22 +83,30 @@ function eachTarget(t, options, done) {
     cli.info(action.toString());
   });
 
-  Q.all([
-    localFiles.applyStrategy(t.strategy),
-    t.cdn.listFiles()
-  ]).spread(function (localFiles, remoteFiles) {
-    info(remoteFiles.length + ' remote file(s)');
+  cli.info('applying "' + t.strategy + '" strategy to local file(s)');
+  localFiles.applyStrategy(t.strategy).then(function (files) {
+    theseLocalFiles = files;
+    info('scanning...');
+    t.cdn.once('files.length', function (length) {
+      bar = new ProgressBar('[:bar] :current/:total :percent :elapsed :etas', {
+        total: length
+      });
+    });
+    t.cdn.on('file:fixed', function () {
+      bar.tick();
+    });
+    return t.cdn.listFiles();
+  }).then(function (remoteFiles) {
     actions = new ActionList();
-    actions.compareFileLists(localFiles, remoteFiles);
+    actions.compareFileLists(theseLocalFiles, remoteFiles);
     info(actions.length + ' synchronisation action(s) to perform');
     return t.cdn.executeActions(actions, options);
 
-  }).then(function () {
-    done();
-
   }).fail(function (err) {
     cli.fatal(err);
-  }).done();
+  }).done(function () {
+    done();
+  });
 }
 
 function go(options) {

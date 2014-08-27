@@ -9,11 +9,12 @@ path = require('path');
 
 // 3rd-party modules
 
-var chai, assert, sinon, ZSchema;
+var chai, assert, sinon, request, ZSchema;
 
 chai = require('chai');
 chai.use(require('sinon-chai'));
 assert = require('chai').assert;
+request = require('request');
 sinon = require('sinon');
 ZSchema = require('z-schema');
 
@@ -41,37 +42,40 @@ example = {
 };
 
 suite('JSON schema for `.cdn-sync.json`', function () {
-  var validator, schema, compiledSchema;
+  var validator, schema, jsonSchemaURL;
 
-  suiteSetup(function () {
+  suiteSetup(function (done) {
+    jsonSchemaURL = 'http://json-schema.org/draft-04/schema';
     validator = new ZSchema({
-      strict: false // true
+      strictMode: false // true
     });
     schema = require(path.join(__dirname, '..', 'doc', 'cdn-sync.schema.json'));
-  });
-
-  test('schema passes validation', function (done) {
-    validator.validateSchema(schema, function (err, report) {
-      assert.isNull(err);
-      assert.isObject(report);
-      assert.lengthOf(report.errors, 0);
+    request(jsonSchemaURL, function (err, res, body) {
+      validator.setRemoteReference(jsonSchemaURL, JSON.parse(body));
       done();
     });
   });
 
-  test('schema compiles', function (done) {
-    validator.compileSchema(schema, function (err, compiled) {
-      assert(true, 'asynchronous callback is executed');
-      assert.isNull(err, 'no compilation errors');
-      assert(compiled);
-      compiledSchema = compiled;
-      done();
-    });
+  test('schema passes validation', function () {
+    var err, valid;
+    valid = validator.validateSchema(schema);
+    err = validator.getLastErrors();
+    assert(!err);
+    assert.isTrue(valid);
+  });
+
+  test('schema compiles', function () {
+    var err, valid;
+    valid = validator.compileSchema(schema);
+    err = validator.getLastErrors();
+    assert(!err);
+    assert.isTrue(valid);
   });
 
   test('example validates against compiled schema', function (done) {
-    validator.validate(example, compiledSchema, function (report) {
-      assert.isNull(report);
+    validator.validate(example, schema, function (err, valid) {
+      assert(!err);
+      assert.isTrue(valid);
       done();
     });
   });
@@ -80,8 +84,9 @@ suite('JSON schema for `.cdn-sync.json`', function () {
     var broken;
     broken = JSON.parse(JSON.stringify(example));
     delete broken.targets[0].options.region;
-    validator.validate(broken, compiledSchema, function (err, report) {
-      assert.isObject(err);
+    validator.validate(broken, schema, function (err, valid) {
+      assert(err);
+      assert.isFalse(valid);
       done();
     });
   });

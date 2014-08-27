@@ -30,6 +30,10 @@ FileList = cdnSync.FileList;
 
 var localFiles;
 
+// lift the default socket cap from 5 to Infinity
+require('http').globalAgent.maxSockets = Infinity;
+require('https').globalAgent.maxSockets = Infinity;
+
 function init(options) {
   var target = path.join(process.cwd(), '.cdn-sync.json');
   if (options.force) {

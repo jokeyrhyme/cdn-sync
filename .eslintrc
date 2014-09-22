@@ -1,0 +1,12 @@
+{
+  "env": {
+    "mocha": true,
+    "node": true
+  },
+  "globals": {},
+  "rules": {
+    "no-mixed-spaces-and-tabs": [2],
+    "no-underscore-dangle": 0,
+    "quotes": [1, "single", "avoid-escape"]
+  }
+}

@@ -41,9 +41,8 @@ function init(options) {
   } else {
     fs.exists(target, function (exists) {
       if (exists) {
-        cli.error(target + ' already exists');
         cli.info('remove existing file or use --force');
-        process.exit(1);
+        cli.fatal(target + ' already exists');
       } else {
         cli.fatal('`init` not implemented yet');
       }
@@ -71,9 +70,8 @@ function testConfig() {
       dfrd.resolve(config);
     });
   } else {
-    cli.error('.cdn-sync.json not found for ' + process.cwd());
     cli.info('use `cdn-sync init` to get started');
-    process.exit(1);
+    cli.fatal('.cdn-sync.json not found for ' + process.cwd());
   }
   return dfrd.promise;
 }

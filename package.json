@@ -1,7 +1,7 @@
 {
   "name": "cdn-sync",
   "description": "deflate / synchronise assets to a CDN",
-  "version": "0.6.0",
+  "version": "0.8.0",
   "homepage": "https://github.com/jokeyrhyme/cdn-sync",
   "author": {
     "name": "Ron Waldon",
@@ -37,29 +37,29 @@
   },
   "dependencies": {
     "async": "0.9.0",
-    "aws-sdk": "2.0.15",
-    "cli": "0.6.4",
+    "aws-sdk": "2.0.29",
+    "cli": "0.6.5",
     "findup-sync": "0.1.3",
-    "glob": "4.0.5",
-    "graceful-fs": "3.0.2",
+    "glob": "4.3.0",
+    "graceful-fs": "3.0.5",
     "mime": "1.2.11",
-    "mmmagic": "0.3.8",
+    "mmmagic": "0.3.11",
     "progress": "~1.1.7",
     "q": "0.9.7",
     "underscore": "1.7.0",
-    "z-schema": "3.0.0"
+    "z-schema": "3.1.5"
   },
   "devDependencies": {
-    "chai": "~1.9",
+    "chai": "~1.10",
     "grunt": "~0.4",
     "grunt-contrib-watch": "~0.6",
-    "grunt-jslint": "~1.1",
-    "grunt-mocha-cli": "~1.10",
+    "grunt-eslint": "^2.1.0",
+    "grunt-mocha-cli": "~1.11",
     "grunt-mocha-cov": "~0.3",
-    "mocha": "~1.21",
-    "request": "^2.40.0",
-    "sinon": "~1.10",
-    "sinon-chai": "~2.5"
+    "mocha": "~2.0",
+    "request": "^2.49.0",
+    "sinon": "~1.12",
+    "sinon-chai": "~2.6"
   },
   "peerDependencies": {},
   "keywords": []

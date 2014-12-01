@@ -1,30 +1,27 @@
-/*jslint indent:2, maxlen:80, node:true, nomen:true*/
-/*global suite, test, suiteSetup, suiteTeardown, setup, teardown*/ // Mocha
 'use strict';
 
 // Node.JS standard modules
 
 var path = require('path');
+var EventEmitter = require('events').EventEmitter;
 
 // 3rd-party modules
 
-var chai, assert, sinon;
-
-chai = require('chai');
-chai.use(require('sinon-chai'));
-assert = require('chai').assert;
-sinon = require('sinon');
+var chai = require('chai');
+var assert = require('chai').assert;
+var sinon = require('sinon');
 
 // custom modules
 
-var ActionList, File, FileList;
-ActionList = require(path.join(__dirname, '..', 'lib', 'actionlist'));
-File = require(path.join(__dirname, '..', 'lib', 'file'));
-FileList = require(path.join(__dirname, '..', 'lib', 'filelist'));
+var ActionList = require(path.join(__dirname, '..', 'lib', 'actionlist'));
+var File = require(path.join(__dirname, '..', 'lib', 'file'));
+var FileList = require(path.join(__dirname, '..', 'lib', 'filelist'));
 
 // promise-bound anti-callbacks
 
 // this module
+
+chai.use(require('sinon-chai'));
 
 suite('AWS module', function () {
 
@@ -46,7 +43,7 @@ suite('AWS constructor', function () {
 });
 
 suite('AWS object: some local, some remote', function () {
-  var CDN, cdn, listStub, headStub, localFiles;
+  var CDN, cdn, listStub, localFiles;
 
   CDN = require('../lib/cdn/aws');
   cdn = new CDN();
@@ -85,23 +82,22 @@ suite('AWS object: some local, some remote', function () {
       });
     });
 
-    headStub = sinon.stub(cdn.api, 'headObject', function (params, callback) {
-      if (params.Key === 'local-only.js') {
-        callback(new Error(), {
-          Code: 404
-        });
-      } else {
-        callback(null, {
-          CacheControl: '',
-          ContentEncoding: null,
-          ContentLength: 123,
-          ContentType: 'application/javascript',
-          ETag: 'abc123',
-          Expiration: '',
-          Expires: new Date(),
-          LastModified: new Date()
-        });
-      }
+    sinon.stub(cdn.api, 'headObject', function (params) {
+      var emitter = new EventEmitter();
+      emitter.send = function () {
+        if (params.Key === 'local-only.js') {
+          emitter.emit('error', new Error('404'));
+        } else {
+          emitter.emit('success', { data: {
+            ContentEncoding: '',
+            ContentLength: 123,
+            ContentType: 'application/javascript',
+            Etag: 'abc123'
+          }});
+        }
+        emitter.emit('complete');
+      };
+      return emitter;
     });
 
     localFiles = new FileList();
@@ -140,6 +136,7 @@ suite('AWS object: some local, some remote', function () {
   test('cdn.listFiles calls AWS.S3.listObjects', function (done) {
     cdn.listFiles().done(function (files) {
       assert(listStub.called);
+      assert.isArray(files);
       done();
     });
   });

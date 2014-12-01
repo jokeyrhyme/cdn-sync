@@ -1,21 +1,12 @@
-/*jslint indent:2, maxlen:80, node:true*/
-/*global suite:true, test:true, suiteSetup:true, suiteTeardown:true, setup:true,
-teardown:true*/ // Mocha
-/*jslint nomen:true*/ // Underscore.JS and __dirname
 'use strict';
 
 // Node.JS standard modules
 
-var fs, path;
-fs = require('fs');
-path = require('path');
+var fs = require('fs');
 
 // 3rd-party modules
 
-var chai, assert;
-
-chai = require('chai');
-assert = require('chai').assert;
+var assert = require('chai').assert;
 
 // custom modules
 
@@ -53,7 +44,7 @@ suite('bufferUtils.fromStream', function () {
     }, function (err) {
       // onError
       assert.fail(true, false, 'does not call error handler');
-      done();
+      done(err);
     }).done();
   });
 

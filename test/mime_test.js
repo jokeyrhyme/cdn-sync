@@ -1,23 +1,10 @@
-/*jslint indent:2, maxlen:80, node:true*/
-/*global suite:true, test:true, suiteSetup:true, suiteTeardown:true, setup:true,
- teardown:true*/ // Mocha
-/*jslint nomen:true*/ // Underscore.JS and __dirname
 'use strict';
-
-// Node.JS standard modules
-
-var fs, path;
-fs = require('fs');
-path = require('path');
 
 // 3rd-party modules
 
-var chai, assert, sinon;
-
-chai = require('chai');
+var chai = require('chai');
+var assert = require('chai').assert;
 chai.use(require('sinon-chai'));
-assert = require('chai').assert;
-sinon = require('sinon');
 
 // custom modules
 
@@ -26,10 +13,9 @@ sinon = require('sinon');
 // this module
 
 suite('3rd-party "mime"', function () {
-  var File, mime;
+  var mime;
 
   suiteSetup(function () {
-    File = require(path.join('..', 'lib', 'file'));
     mime = require('mime');
   });
 
@@ -43,10 +29,9 @@ suite('3rd-party "mime"', function () {
 });
 
 suite('"mime" and MIMEs', function () {
-  var File, mime, fixture;
+  var mime, fixture;
 
   suiteSetup(function () {
-    File = require(path.join('..', 'lib', 'file'));
     mime = require('mime');
     fixture = {
       'pen.cur': 'image/vnd.microsoft.icon',

@@ -1,28 +1,24 @@
-/*jslint indent:2, maxlen:80, node:true*/
-/*jslint nomen:true*/ // Underscore.JS and __dirname
 'use strict';
+
 // Node.JS standard modules
 
-var fs, path;
-fs = require('fs');
-path = require('path');
+var fs = require('fs');
+var path = require('path');
 
 // 3rd-party modules
 
-var Q, async, cli, findup, ProgressBar;
-Q = require('q');
-async = require('async');
-cli = require('cli');
-findup = require('findup-sync');
-ProgressBar = require('progress');
+var Q = require('q');
+var async = require('async');
+var cli = require('cli');
+var findup = require('findup-sync');
+var ProgressBar = require('progress');
 
 // custom modules
 
-var cdnSync, ActionList, Config, FileList;
-cdnSync = require(path.join(__dirname, 'lib'));
-ActionList = cdnSync.ActionList;
-Config = cdnSync.Config;
-FileList = cdnSync.FileList;
+var cdnSync = require(path.join(__dirname, 'lib'));
+var ActionList = cdnSync.ActionList;
+var Config = cdnSync.Config;
+var FileList = cdnSync.FileList;
 
 // promise-bound anti-callbacks
 
@@ -41,9 +37,8 @@ function init(options) {
   } else {
     fs.exists(target, function (exists) {
       if (exists) {
-        cli.error(target + ' already exists');
         cli.info('remove existing file or use --force');
-        process.exit(1);
+        cli.fatal(target + ' already exists');
       } else {
         cli.fatal('`init` not implemented yet');
       }
@@ -71,9 +66,8 @@ function testConfig() {
       dfrd.resolve(config);
     });
   } else {
-    cli.error('.cdn-sync.json not found for ' + process.cwd());
     cli.info('use `cdn-sync init` to get started');
-    process.exit(1);
+    cli.fatal('.cdn-sync.json not found for ' + process.cwd());
   }
   return dfrd.promise;
 }
@@ -134,9 +128,9 @@ cli.parsePackageJson();
 cli.parse({
   'dry-run': ['n', 'make no changes, only simulate actions']
 }, {
-  'init' : 'create a .cdn-sync.json file in this directory',
-  'test' : 'health-check on active .cdn-syn.json file',
-  'go' : 'execute synchronisation (default if no command)'
+  'init': 'create a .cdn-sync.json file in this directory',
+  'test': 'health-check on active .cdn-syn.json file',
+  'go': 'execute synchronisation (default if no command)'
 });
 
 /*jslint unparam:true*/

@@ -53,7 +53,7 @@
     "chai": "~1.10",
     "grunt": "~0.4",
     "grunt-contrib-watch": "~0.6",
-    "grunt-jslint": "~1.1",
+    "grunt-eslint": "^2.1.0",
     "grunt-mocha-cli": "~1.11",
     "grunt-mocha-cov": "~0.3",
     "mocha": "~2.0",

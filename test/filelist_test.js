@@ -1,31 +1,24 @@
-/*jslint indent:2, maxlen:80, node:true*/
-/*global suite:true, test:true, suiteSetup:true, suiteTeardown:true, setup:true,
- teardown:true*/ // Mocha
-/*jslint nomen:true*/ // Underscore.JS and __dirname
-/*jslint stupid:true*/ // allow ...Sync methods to be used
+/*eslint-disable no-sync*/
 'use strict';
 
 // Node.JS standard modules
 
-var fs, path;
-fs = require('fs');
-path = require('path');
+var fs = require('fs');
+var path = require('path');
 
 // 3rd-party modules
 
-var chai, assert, sinon, Q;
-
-chai = require('chai');
-chai.use(require('sinon-chai'));
-assert = require('chai').assert;
-sinon = require('sinon');
-Q = require('q');
+var chai = require('chai');
+var assert = require('chai').assert;
+var Q = require('q');
 
 // custom modules
 
 // promise-bound anti-callbacks
 
 // this module
+
+chai.use(require('sinon-chai'));
 
 suite('FileList module', function () {
 
@@ -108,7 +101,7 @@ suite('FileList object: "fromPath" with sub-directories', function () {
     }, function (err) {
       // onError
       assert.fail(true, false, 'does not call error handler');
-      done();
+      done(err);
     });
   });
 
@@ -127,7 +120,7 @@ suite('FileList object: "fromPath" with sub-directories', function () {
     }, function (err) {
       // onError
       assert.fail(true, false, 'does not call error handler');
-      done();
+      done(err);
     }).done();
   });
 
@@ -155,7 +148,7 @@ suite('fileList.applyStrategy "gzip"', function () {
     }, function (err) {
       // onError
       assert.fail(true, false, 'does not call error handler');
-      done();
+      done(err);
     });
   });
 
@@ -187,7 +180,7 @@ suite('fileList.applyStrategy "clone"', function () {
     }, function (err) {
       // onError
       assert.fail(true, false, 'does not call error handler');
-      done();
+      done(err);
     });
   });
 
@@ -219,7 +212,7 @@ suite('fileList.applyStrategy "gzip-suffix"', function () {
     }, function (err) {
       // onError
       assert.fail(true, false, 'does not call error handler');
-      done();
+      done(err);
     });
   });
 
@@ -262,7 +255,7 @@ suite('fileList.applyStrategy ["clone", "gzip-suffix"]', function () {
     }, function (err) {
       // onError
       assert.fail(true, false, 'does not call error handler');
-      done();
+      done(err);
     });
   });
 
@@ -296,7 +289,7 @@ suite('fileList.applyStrategy ["clone", "gzip-suffix"]', function () {
 
   test('files contains ' + filename + '.gz', function () {
     assert(files.some(function (f) {
-      return f.path === (filename + '.gz');
+      return f.path === filename + '.gz';
     }), 'known file included');
     assert(files.indexOf(filename + '.gz') !== -1, 'known file index found');
   });

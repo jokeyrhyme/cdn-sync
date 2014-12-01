@@ -1,19 +1,10 @@
-/*jslint indent:2, maxlen:80, node:true*/
-/*global suite:true, test:true, suiteSetup:true, suiteTeardown:true, setup:true,
- teardown:true*/ // Mocha
-/*jslint nomen:true*/ // Underscore.JS and __dirname
 'use strict';
-
-// Node.JS standard modules
 
 // 3rd-party modules
 
-var chai, assert, sinon;
-
-chai = require('chai');
+var chai = require('chai');
+var assert = require('chai').assert;
 chai.use(require('sinon-chai'));
-assert = require('chai').assert;
-sinon = require('sinon');
 
 // custom modules
 

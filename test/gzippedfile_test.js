@@ -1,7 +1,3 @@
-/*jslint indent:2, maxlen:80, node:true*/
-/*global suite:true, test:true, suiteSetup:true, suiteTeardown:true, setup:true,
-teardown:true*/ // Mocha
-/*jslint nomen:true*/ // Underscore.JS and __dirname
 'use strict';
 
 // Node.JS standard modules
@@ -10,28 +6,24 @@ var path = require('path');
 
 // 3rd-party modules
 
-var chai, assert, sinon;
-
-chai = require('chai');
-chai.use(require('sinon-chai'));
-assert = require('chai').assert;
-sinon = require('sinon');
+var chai = require('chai');
+var assert = require('chai').assert;
 
 // custom modules
 
-var cdnSync, File, GzippedFile;
-cdnSync = require(path.join(__dirname, '..', 'lib'));
-File = cdnSync.File;
-GzippedFile = cdnSync.GzippedFile;
+var cdnSync = require(path.join(__dirname, '..', 'lib'));
+var File = cdnSync.File;
+var GzippedFile = cdnSync.GzippedFile;
 
 // promise-bound anti-callbacks
 
 // this module
 
+chai.use(require('sinon-chai'));
+
 suite('GzippedFile module', function () {
 
   test('requires without issue', function () {
-    var GzippedFile = require(path.join(__dirname, '..', 'lib', 'gzippedfile'));
     assert(GzippedFile instanceof Function, 'got GzippedFile constructor');
   });
 

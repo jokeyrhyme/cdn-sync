@@ -1,22 +1,15 @@
-/*jslint indent:2, maxlen:80, node:true, nomen:true*/
-/*global suite, test, suiteSetup, suiteTeardown, setup, teardown*/ // Mocha
 'use strict';
 
 // Node.JS standard modules
 
-var path;
-path = require('path');
+var path = require('path');
 
 // 3rd-party modules
 
-var chai, assert, sinon, request, ZSchema;
-
-chai = require('chai');
-chai.use(require('sinon-chai'));
-assert = require('chai').assert;
-request = require('request');
-sinon = require('sinon');
-ZSchema = require('z-schema');
+var chai = require('chai');
+var assert = require('chai').assert;
+var request = require('request');
+var ZSchema = require('z-schema');
 
 // custom modules
 
@@ -25,6 +18,9 @@ ZSchema = require('z-schema');
 // this module
 
 var example;
+
+chai.use(require('sinon-chai'));
+
 example = {
   "targets": [
     {
@@ -52,6 +48,9 @@ suite('JSON schema for `.cdn-sync.json`', function () {
     });
     schema = require(path.join(__dirname, '..', 'doc', 'cdn-sync.schema.json'));
     request(jsonSchemaURL, function (err, res, body) {
+      if (err) {
+        done(err);
+      }
       validator.setRemoteReference(jsonSchemaURL, JSON.parse(body));
       done();
     });

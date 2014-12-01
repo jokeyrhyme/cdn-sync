@@ -1,33 +1,27 @@
-/*jslint indent:2, maxlen:80, node:true, nomen:true*/
-/*global suite, test, suiteSetup, suiteTeardown, setup, teardown*/ // Mocha
 'use strict';
 
 // Node.JS standard modules
 
-var path, EventEmitter;
-
-path = require('path');
-EventEmitter = require('events').EventEmitter;
+var path = require('path');
+var EventEmitter = require('events').EventEmitter;
 
 // 3rd-party modules
 
-var chai, assert, sinon;
-
-chai = require('chai');
-chai.use(require('sinon-chai'));
-assert = require('chai').assert;
-sinon = require('sinon');
+var chai = require('chai');
+var assert = require('chai').assert;
+var sinon = require('sinon');
 
 // custom modules
 
-var ActionList, File, FileList;
-ActionList = require(path.join(__dirname, '..', 'lib', 'actionlist'));
-File = require(path.join(__dirname, '..', 'lib', 'file'));
-FileList = require(path.join(__dirname, '..', 'lib', 'filelist'));
+var ActionList = require(path.join(__dirname, '..', 'lib', 'actionlist'));
+var File = require(path.join(__dirname, '..', 'lib', 'file'));
+var FileList = require(path.join(__dirname, '..', 'lib', 'filelist'));
 
 // promise-bound anti-callbacks
 
 // this module
+
+chai.use(require('sinon-chai'));
 
 suite('AWS module', function () {
 
@@ -49,7 +43,7 @@ suite('AWS constructor', function () {
 });
 
 suite('AWS object: some local, some remote', function () {
-  var CDN, cdn, listStub, headStub, localFiles;
+  var CDN, cdn, listStub, localFiles;
 
   CDN = require('../lib/cdn/aws');
   cdn = new CDN();
@@ -88,7 +82,7 @@ suite('AWS object: some local, some remote', function () {
       });
     });
 
-    headStub = sinon.stub(cdn.api, 'headObject', function (params) {
+    sinon.stub(cdn.api, 'headObject', function (params) {
       var emitter = new EventEmitter();
       emitter.send = function () {
         if (params.Key === 'local-only.js') {
@@ -142,6 +136,7 @@ suite('AWS object: some local, some remote', function () {
   test('cdn.listFiles calls AWS.S3.listObjects', function (done) {
     cdn.listFiles().done(function (files) {
       assert(listStub.called);
+      assert.isArray(files);
       done();
     });
   });

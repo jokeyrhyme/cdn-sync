@@ -1,24 +1,20 @@
-/*jslint indent:2, maxlen:80, node:true*/
-/*global suite:true, test:true, suiteSetup:true, suiteTeardown:true, setup:true,
- teardown:true*/ // Mocha
+/*eslint-disable no-unused-vars*/
 'use strict';
 
 // Node.JS standard modules
 
 // 3rd-party modules
 
-var chai, assert, sinon;
-
-chai = require('chai');
-chai.use(require('sinon-chai'));
-assert = require('chai').assert;
-sinon = require('sinon');
+var chai = require('chai');
+var assert = require('chai').assert;
 
 // custom modules
 
 // promise-bound anti-callbacks
 
 // this module
+
+chai.use(require('sinon-chai'));
 
 suite('Action module', function () {
 

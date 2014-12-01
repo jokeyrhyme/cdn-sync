@@ -1,16 +1,13 @@
-/*jslint indent:2, maxlen:80, node:true, nomen:true*/
 'use strict';
 
 // Node.JS standard modules
 
-var path;
-path = require('path');
+var path = require('path');
 
 // 3rd-party modules
 
-var glob, Mocha;
-glob = require('glob');
-Mocha = require('mocha');
+var glob = require('glob');
+var Mocha = require('mocha');
 
 // custom modules
 

@@ -1,29 +1,23 @@
-/*jslint indent:2, maxlen:80, node:true*/
-/*global suite:true, test:true, suiteSetup:true, suiteTeardown:true, setup:true,
-teardown:true*/ // Mocha
-/*jslint nomen:true*/ // Underscore.JS and __dirname
 'use strict';
 
 // Node.JS standard modules
 
-var fs, path;
-fs = require('fs');
-path = require('path');
+var fs = require('fs');
+var path = require('path');
 
 // 3rd-party modules
 
-var chai, assert, sinon;
-
-chai = require('chai');
-chai.use(require('sinon-chai'));
-assert = require('chai').assert;
-sinon = require('sinon');
+var chai = require('chai');
+var assert = require('chai').assert;
+var sinon = require('sinon');
 
 // custom modules
 
 // promise-bound anti-callbacks
 
 // this module
+
+chai.use(require('sinon-chai'));
 
 suite('File module', function () {
 
@@ -50,6 +44,7 @@ suite('File object: constructed with no arguments', function () {
   test('ready for use', function (done) {
     file.promise.then(function (f) {
       assert(true, 'ready with no failures');
+      assert.instanceOf(f, File);
       done();
     }, function () {
       assert(false, 'ready but raised an error');
@@ -105,6 +100,7 @@ suite('File object: constructed with local path and MIME', function () {
   test('ready for use', function (done) {
     file.promise.then(function (f) {
       assert(true, 'ready with no failures');
+      assert.instanceOf(f, File);
       done();
     }, function () {
       assert(false, 'ready but raised an error');
@@ -140,7 +136,7 @@ suite('File object: constructed with local path and MIME', function () {
 });
 
 suite('File object: clone', function () {
-  var File, md5Spy, mimeSpy, fileA, fileB;
+  var File, fileA, fileB;
 
   suiteSetup(function () {
     File = require('../lib/file');

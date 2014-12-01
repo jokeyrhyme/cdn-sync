@@ -1,4 +1,3 @@
-/*jslint indent:2, maxlen:80, node:true*/
 'use strict';
 
 module.exports = function (grunt) {
@@ -6,23 +5,8 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
 
-    jslint: {
-      all: {
-        src: [
-          '**/*.js',
-          '**/*.json',
-          '!test/**/*',
-          '!node_modules/**/*'
-        ],
-        exclude: [],
-        directives: {
-          todo: true // TODO: eventually eliminate this exemption
-        },
-        options: {
-          errorsOnly: true,
-          failOnError: true
-        }
-      }
+    eslint: {
+      target: [ './' ]
     },
 
     mochacli: {
@@ -70,12 +54,12 @@ module.exports = function (grunt) {
 
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-jslint');
+  grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('grunt-mocha-cov');
 
-  grunt.registerTask('travis', ['jslint', 'mochacli', 'mochacov:coveralls']);
-  grunt.registerTask('test', ['jslint', 'mochacli', 'mochacov:html']);
+  grunt.registerTask('travis', ['eslint', 'mochacli', 'mochacov:coveralls']);
+  grunt.registerTask('test', ['eslint', 'mochacli', 'mochacov:html']);
 
   // Default task.
   grunt.registerTask('default', ['test']);

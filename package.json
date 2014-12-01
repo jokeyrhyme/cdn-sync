@@ -50,16 +50,16 @@
     "z-schema": "3.0.0"
   },
   "devDependencies": {
-    "chai": "~1.9",
+    "chai": "~1.10",
     "grunt": "~0.4",
     "grunt-contrib-watch": "~0.6",
     "grunt-jslint": "~1.1",
-    "grunt-mocha-cli": "~1.10",
+    "grunt-mocha-cli": "~1.11",
     "grunt-mocha-cov": "~0.3",
-    "mocha": "~1.21",
-    "request": "^2.40.0",
-    "sinon": "~1.10",
-    "sinon-chai": "~2.5"
+    "mocha": "~2.0",
+    "request": "^2.49.0",
+    "sinon": "~1.12",
+    "sinon-chai": "~2.6"
   },
   "peerDependencies": {},
   "keywords": []

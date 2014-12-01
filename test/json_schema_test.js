@@ -45,6 +45,7 @@ suite('JSON schema for `.cdn-sync.json`', function () {
   var validator, schema, jsonSchemaURL;
 
   suiteSetup(function (done) {
+    this.timeout(15e3);
     jsonSchemaURL = 'http://json-schema.org/draft-04/schema';
     validator = new ZSchema({
       strictMode: false // true

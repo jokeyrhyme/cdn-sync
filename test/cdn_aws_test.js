@@ -4,7 +4,10 @@
 
 // Node.JS standard modules
 
-var path = require('path');
+var path, EventEmitter;
+
+path = require('path');
+EventEmitter = require('events').EventEmitter;
 
 // 3rd-party modules
 
@@ -85,23 +88,22 @@ suite('AWS object: some local, some remote', function () {
       });
     });
 
-    headStub = sinon.stub(cdn.api, 'headObject', function (params, callback) {
-      if (params.Key === 'local-only.js') {
-        callback(new Error(), {
-          Code: 404
-        });
-      } else {
-        callback(null, {
-          CacheControl: '',
-          ContentEncoding: null,
-          ContentLength: 123,
-          ContentType: 'application/javascript',
-          ETag: 'abc123',
-          Expiration: '',
-          Expires: new Date(),
-          LastModified: new Date()
-        });
-      }
+    headStub = sinon.stub(cdn.api, 'headObject', function (params) {
+      var emitter = new EventEmitter();
+      emitter.send = function () {
+        if (params.Key === 'local-only.js') {
+          emitter.emit('error', new Error('404'));
+        } else {
+          emitter.emit('success', { data: {
+            ContentEncoding: '',
+            ContentLength: 123,
+            ContentType: 'application/javascript',
+            Etag: 'abc123'
+          }});
+        }
+        emitter.emit('complete');
+      };
+      return emitter;
     });
 
     localFiles = new FileList();

@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */ // this is a test/dev file
 'use strict'
 
 // Node.JS standard modules

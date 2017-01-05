@@ -35,8 +35,8 @@ function init (options) {
   if (options.force) {
     cli.fatal('`init` not implemented yet')
   } else {
-    fs.exists(target, function (exists) {
-      if (exists) {
+    fs.access(target, function (err) {
+      if (!err) {
         cli.info('remove existing file or use --force')
         cli.fatal(target + ' already exists')
       } else {

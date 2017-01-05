@@ -70,7 +70,7 @@
     "fixpack": "fixpack",
     "flow_check": "flow check",
     "mocha": "mocha",
-    "test": "grunt test",
-    "posttest": "npm run eslint && npm run flow_check && npm run fixpack"
+    "posttest": "npm run eslint && npm run flow_check && npm run fixpack",
+    "test": "grunt test"
   }
 }

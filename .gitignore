@@ -27,3 +27,4 @@ node_modules
 /tmp
 
 .eslintcache
+.nyc_output

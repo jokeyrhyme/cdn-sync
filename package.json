@@ -2,39 +2,14 @@
   "name": "cdn-sync",
   "description": "deflate / synchronise assets to a CDN",
   "version": "0.8.0",
-  "homepage": "https://github.com/jokeyrhyme/cdn-sync",
-  "author": {
-    "name": "Ron Waldon",
-    "email": "jokeyrhyme@gmail.com",
-    "url": "http://jokeyrhy.me/"
-  },
-  "contributors": [],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jokeyrhyme/cdn-sync.git"
+  "author": "Ron Waldon <jokeyrhyme@gmail.com> (http://jokeyrhy.me/)",
+  "bin": {
+    "cdn-sync": "./bin/cdn-sync"
   },
   "bugs": {
     "url": "https://github.com/jokeyrhyme/cdn-sync/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/jokeyrhyme/cdn-sync/blob/master/LICENSE-MIT"
-    }
-  ],
-  "bin": {
-    "cdn-sync": "./bin/cdn-sync"
-  },
-  "main": "lib/cdn-sync",
-  "scripts": {
-    "test": "grunt test",
-    "blanket": {
-      "pattern": "//^((?!node_modules)(?!_test).)*$/"
-    }
-  },
-  "engines": {
-    "node": ">=4"
-  },
+  "contributors": [],
   "dependencies": {
     "async": "2.1.4",
     "aws-sdk": "2.7.15",
@@ -51,6 +26,13 @@
   },
   "devDependencies": {
     "chai": "~3.5.0",
+    "eslint": "^3.12.2",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-node": "^3.0.5",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "fixpack": "^2.3.1",
+    "flow-bin": "^0.37.4",
     "grunt": "~1.0.1",
     "grunt-contrib-watch": "~1.0.0",
     "grunt-eslint": "^19.0.0",
@@ -61,6 +43,34 @@
     "sinon": "~1.17.6",
     "sinon-chai": "~2.8.0"
   },
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "engines": {
+    "node": ">=4",
+    "npm": ">=3"
+  },
+  "homepage": "https://github.com/jokeyrhyme/cdn-sync",
+  "keywords": [],
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/jokeyrhyme/cdn-sync/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "lib/cdn-sync",
   "peerDependencies": {},
-  "keywords": []
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jokeyrhyme/cdn-sync.git"
+  },
+  "scripts": {
+    "eslint": "eslint --fix --cache .",
+    "fixpack": "fixpack",
+    "flow_check": "flow check",
+    "mocha": "mocha",
+    "test": "grunt test"
+  }
 }

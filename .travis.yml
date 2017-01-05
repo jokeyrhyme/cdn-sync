@@ -1,8 +1,23 @@
 language: node_js
 node_js:
-  - "4"
-
+  - '4'
+  - '6'
 before_script:
   - npm install -g grunt-cli
-
-script: 'grunt travis'
+script: grunt travis
+sudo: false
+env:
+  global:
+    - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+install:
+  - npm install --global npm
+  - npm install --global flow-typed
+  - npm install --global typings
+  - npm install --global yarn
+  - npm install

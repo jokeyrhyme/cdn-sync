@@ -1,6 +1,5 @@
-# cdn-sync
-[![Build Status](https://travis-ci.org/jokeyrhyme/cdn-sync.png?branch=master,develop)](https://travis-ci.org/jokeyrhyme/cdn-sync)
-[![NPM version](https://badge.fury.io/js/cdn-sync.png)](http://badge.fury.io/js/cdn-sync) [![Coverage Status](https://coveralls.io/repos/jokeyrhyme/cdn-sync/badge.png)](https://coveralls.io/r/jokeyrhyme/cdn-sync)
+# cdn-sync [![npm](https://img.shields.io/npm/v/cdn-sync.svg?maxAge=2592000)](https://www.npmjs.com/package/cdn-sync) [![Travis CI Status](https://travis-ci.org/jokeyrhyme/cdn-sync.svg?branch=master)](https://travis-ci.org/jokeyrhyme/cdn-sync)
+[![Coverage Status](https://coveralls.io/repos/jokeyrhyme/cdn-sync/badge.png)](https://coveralls.io/r/jokeyrhyme/cdn-sync)
 
 Synchronise a local directory with AWS CloudFront / S3, maintaining correct headers, etc.
 

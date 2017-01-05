@@ -1,5 +1,4 @@
 # cdn-sync [![npm](https://img.shields.io/npm/v/cdn-sync.svg?maxAge=2592000)](https://www.npmjs.com/package/cdn-sync) [![Travis CI Status](https://travis-ci.org/jokeyrhyme/cdn-sync.svg?branch=master)](https://travis-ci.org/jokeyrhyme/cdn-sync)
-[![Coverage Status](https://coveralls.io/repos/jokeyrhyme/cdn-sync/badge.png)](https://coveralls.io/r/jokeyrhyme/cdn-sync)
 
 Synchronise a local directory with AWS CloudFront / S3, maintaining correct headers, etc.
 
@@ -72,8 +71,7 @@ Note: for targets[index].options, use the options you would pass to the [AWS.S3 
 Formal style-guide for this project is JSLint. See JSLint settings at the top of
 each file.
 
-Add unit tests for any new or changed functionality. Lint and test your code
-using [Grunt](http://gruntjs.com/).
+Add unit tests for any new or changed functionality. Lint and test your code:
 
     npm test
 

@@ -12,3 +12,5 @@
 ### Fixed
 
 -   make explicit that dot-files are ignored (already implicit default)
+
+-   bump deps and devDeps (fixes #24) (fixes #27)

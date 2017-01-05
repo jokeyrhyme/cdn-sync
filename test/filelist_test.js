@@ -52,7 +52,8 @@ suite('FileList object: factory method "fromPath"', function () {
   })
 
   test('factory method "fromPath" finds files', function () {
-    assert.lengthOf(files, fs.readdirSync(__dirname).length, 'found files')
+    // 1 dot-file in this directory
+    assert.lengthOf(files, fs.readdirSync(__dirname).length - 1, 'found files')
   })
 
   test('"indexOf" finds a file known to exist', function () {

@@ -4,10 +4,6 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
 
-    eslint: {
-      target: [ './' ]
-    },
-
     mochacli: {
       options: {
         require: ['chai'],
@@ -53,12 +49,11 @@ module.exports = function (grunt) {
 
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-watch')
-  grunt.loadNpmTasks('grunt-eslint')
   grunt.loadNpmTasks('grunt-mocha-cli')
   grunt.loadNpmTasks('grunt-mocha-cov')
 
-  grunt.registerTask('travis', ['eslint', 'mochacli', 'mochacov:coveralls'])
-  grunt.registerTask('test', ['eslint', 'mochacli', 'mochacov:html'])
+  grunt.registerTask('travis', ['mochacli', 'mochacov:coveralls'])
+  grunt.registerTask('test', ['mochacli', 'mochacov:html'])
 
   // Default task.
   grunt.registerTask('default', ['test'])

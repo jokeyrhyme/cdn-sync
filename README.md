@@ -75,7 +75,7 @@ each file.
 Add unit tests for any new or changed functionality. Lint and test your code
 using [Grunt](http://gruntjs.com/).
 
-    grunt test
+    npm test
 
 This project uses [Git Flow](https://github.com/nvie/gitflow), so the master
 branch always reflects what is in production (i.e. what is in the NPM repository).

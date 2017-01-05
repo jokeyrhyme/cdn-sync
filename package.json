@@ -2,65 +2,73 @@
   "name": "cdn-sync",
   "description": "deflate / synchronise assets to a CDN",
   "version": "0.8.0",
-  "homepage": "https://github.com/jokeyrhyme/cdn-sync",
-  "author": {
-    "name": "Ron Waldon",
-    "email": "jokeyrhyme@gmail.com",
-    "url": "http://jokeyrhy.me/"
-  },
-  "contributors": [],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jokeyrhyme/cdn-sync.git"
+  "author": "Ron Waldon <jokeyrhyme@gmail.com> (http://jokeyrhy.me/)",
+  "bin": {
+    "cdn-sync": "./bin/cdn-sync"
   },
   "bugs": {
     "url": "https://github.com/jokeyrhyme/cdn-sync/issues"
   },
+  "contributors": [],
+  "dependencies": {
+    "async": "2.1.4",
+    "aws-sdk": "2.7.15",
+    "cli": "1.0.1",
+    "findup-sync": "0.4.3",
+    "glob": "7.1.1",
+    "graceful-fs": "4.1.11",
+    "mime": "1.3.4",
+    "mmmagic": "0.4.5",
+    "progress": "~1.1.7",
+    "q": "1.4.1",
+    "underscore": "1.8.3",
+    "z-schema": "3.18.2"
+  },
+  "devDependencies": {
+    "chai": "~3.5.0",
+    "eslint": "^3.12.2",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-node": "^3.0.5",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "fixpack": "^2.3.1",
+    "flow-bin": "^0.37.4",
+    "mocha": "~3.2.0",
+    "nyc": "10.0.0",
+    "request": "^2.49.0",
+    "sinon": "~1.17.6",
+    "sinon-chai": "~2.8.0"
+  },
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "engines": {
+    "node": ">=4",
+    "npm": ">=3"
+  },
+  "homepage": "https://github.com/jokeyrhyme/cdn-sync",
+  "keywords": [],
+  "license": "MIT",
   "licenses": [
     {
       "type": "MIT",
       "url": "https://github.com/jokeyrhyme/cdn-sync/blob/master/LICENSE-MIT"
     }
   ],
-  "bin": {
-    "cdn-sync": "./bin/cdn-sync"
-  },
   "main": "lib/cdn-sync",
-  "scripts": {
-    "test": "grunt test",
-    "blanket": {
-      "pattern": "//^((?!node_modules)(?!_test).)*$/"
-    }
-  },
-  "engines": {
-    "node": ">=0.9.0 <0.11.0"
-  },
-  "dependencies": {
-    "async": "0.9.0",
-    "aws-sdk": "2.0.29",
-    "cli": "0.6.5",
-    "findup-sync": "0.1.3",
-    "glob": "4.3.0",
-    "graceful-fs": "3.0.5",
-    "mime": "1.2.11",
-    "mmmagic": "0.3.11",
-    "progress": "~1.1.7",
-    "q": "0.9.7",
-    "underscore": "1.7.0",
-    "z-schema": "3.1.5"
-  },
-  "devDependencies": {
-    "chai": "~1.10",
-    "grunt": "~0.4",
-    "grunt-contrib-watch": "~0.6",
-    "grunt-eslint": "^2.1.0",
-    "grunt-mocha-cli": "~1.11",
-    "grunt-mocha-cov": "~0.3",
-    "mocha": "~2.0",
-    "request": "^2.49.0",
-    "sinon": "~1.12",
-    "sinon-chai": "~2.6"
-  },
   "peerDependencies": {},
-  "keywords": []
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jokeyrhyme/cdn-sync.git"
+  },
+  "scripts": {
+    "eslint": "eslint --fix --cache .",
+    "fixpack": "fixpack",
+    "flow_check": "flow check",
+    "mocha": "nyc mocha --ui tdd",
+    "nyc": "nyc check-coverage --lines 65",
+    "posttest": "npm run eslint && npm run flow_check && npm run fixpack",
+    "test": "npm run mocha && npm run nyc"
+  }
 }

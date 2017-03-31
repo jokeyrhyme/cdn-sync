@@ -12,7 +12,7 @@
   "contributors": [],
   "dependencies": {
     "async": "2.2.0",
-    "aws-sdk": "2.35.0",
+    "aws-sdk": "2.36.0",
     "cli": "1.0.1",
     "findup-sync": "0.4.3",
     "glob": "7.1.1",

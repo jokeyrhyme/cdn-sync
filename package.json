@@ -26,15 +26,15 @@
   },
   "devDependencies": {
     "chai": "~3.5.0",
-    "eslint": "^3.12.2",
-    "eslint-config-standard": "^8.0.0",
-    "eslint-plugin-node": "^4.0.0",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-standard": "^2.0.1",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^2.2.0",
     "fixpack": "^2.3.1",
-    "flow-bin": "^0.43.0",
     "mocha": "~3.2.0",
-    "nyc": "10.2.0",
+    "nyc": "^10.2.0",
     "request": "^2.49.0",
     "sinon": "~2.1.0",
     "sinon-chai": "~2.9.0"
@@ -56,7 +56,7 @@
       "url": "https://github.com/jokeyrhyme/cdn-sync/blob/master/LICENSE-MIT"
     }
   ],
-  "main": "lib/cdn-sync",
+  "main": "lib/index.js",
   "peerDependencies": {},
   "repository": {
     "type": "git",
@@ -65,10 +65,10 @@
   "scripts": {
     "eslint": "eslint --fix --cache .",
     "fixpack": "fixpack",
-    "flow_check": "flow check",
     "mocha": "nyc mocha --ui tdd",
     "nyc": "nyc check-coverage --lines 65",
-    "posttest": "npm run eslint && npm run flow_check && npm run fixpack",
+    "posttest": "npm run eslint",
+    "pretest": "npm run fixpack",
     "test": "npm run mocha && npm run nyc"
   }
 }

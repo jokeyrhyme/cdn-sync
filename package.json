@@ -21,7 +21,7 @@
     "mmmagic": "0.5.0",
     "progress": "~2.0.0",
     "q": "1.5.1",
-    "underscore": "1.9.0",
+    "underscore": "1.9.1",
     "z-schema": "3.19.1"
   },
   "devDependencies": {

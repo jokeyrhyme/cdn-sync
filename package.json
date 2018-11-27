@@ -17,7 +17,7 @@
     "findup-sync": "2.0.0",
     "glob": "7.1.1",
     "graceful-fs": "4.1.11",
-    "mime": "1.4.0",
+    "mime": "2.4.0",
     "mmmagic": "0.5.0",
     "progress": "~2.0.0",
     "q": "1.5.1",

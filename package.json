@@ -16,7 +16,7 @@
     "cli": "1.0.1",
     "findup-sync": "2.0.0",
     "glob": "7.1.1",
-    "graceful-fs": "4.1.11",
+    "graceful-fs": "4.2.1",
     "mime": "1.4.0",
     "mmmagic": "0.5.0",
     "progress": "~2.0.0",

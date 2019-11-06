@@ -15,7 +15,7 @@
     "aws-sdk": "2.480.0",
     "cli": "1.0.1",
     "findup-sync": "2.0.0",
-    "glob": "7.1.1",
+    "glob": "7.1.6",
     "graceful-fs": "4.1.11",
     "mime": "1.4.0",
     "mmmagic": "0.5.0",
